@@ -1,9 +1,11 @@
 :root {
-  --urf-chat-navy: #06111f;
-  --urf-chat-blue: #0f3a66;
-  --urf-chat-sky: #37a2ff;
-  --urf-chat-ice: #eaf5ff;
-  --urf-chat-line: rgba(139, 190, 241, 0.24);
+  --urf-chat-navy: #0D1117;
+  --urf-chat-blue: #1E90FF;
+  --urf-chat-sky: #1E90FF;
+  --urf-chat-ice: #F3F4F6;
+  --urf-chat-red: #CC2229;
+  /* TODO: replace with exact brand red from logo */
+  --urf-chat-line: rgba(30, 144, 255, 0.24);
   --urf-chat-shadow: 0 24px 70px rgba(2, 10, 24, 0.36);
 }
 
@@ -36,7 +38,7 @@
   border-radius: 22px;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 30% 22%, #4db4ff, #0c4f86 48%, #071527 100%);
+  background: radial-gradient(circle at 30% 22%, #E2555A, var(--urf-chat-red) 48%, var(--urf-chat-navy) 100%);
   box-shadow: 0 18px 44px rgba(3, 14, 32, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.24);
   color: #fff;
   cursor: pointer;
@@ -46,7 +48,7 @@
 .urf-chat-launcher:hover,
 .urf-chat-launcher:focus-visible {
   transform: translateY(-3px);
-  box-shadow: 0 24px 54px rgba(3, 14, 32, 0.5), 0 0 0 5px rgba(55, 162, 255, 0.16);
+  box-shadow: 0 24px 54px rgba(3, 14, 32, 0.5), 0 0 0 5px rgba(204, 34, 41, 0.18);
   outline: none;
 }
 
@@ -65,7 +67,7 @@
   overflow: hidden;
   border: 1px solid var(--urf-chat-line);
   border-radius: 28px;
-  background: linear-gradient(155deg, rgba(9, 30, 54, 0.98), rgba(3, 10, 21, 0.98));
+  background: linear-gradient(155deg, rgba(13, 17, 23, 0.98), rgba(3, 10, 21, 0.98));
   box-shadow: var(--urf-chat-shadow);
 }
 
@@ -81,7 +83,7 @@
   gap: 16px;
   align-items: flex-start;
   border-bottom: 1px solid var(--urf-chat-line);
-  background: linear-gradient(135deg, rgba(55, 162, 255, 0.2), rgba(255, 255, 255, 0.04));
+  background: linear-gradient(135deg, rgba(204, 34, 41, 0.22), rgba(30, 144, 255, 0.08));
 }
 
 .urf-chat-kicker {
@@ -169,7 +171,7 @@
 
 .urf-chat-message.user {
   margin-left: auto;
-  background: linear-gradient(135deg, #39a8ff, #1265a5);
+  background: linear-gradient(135deg, var(--urf-chat-red), #7F1016);
   color: #fff;
   border-bottom-right-radius: 6px;
 }
@@ -183,8 +185,8 @@
 }
 
 .urf-chat-message.error {
-  background: rgba(255, 107, 80, 0.12);
-  border-color: rgba(255, 107, 80, 0.35);
+  background: rgba(204, 34, 41, 0.12);
+  border-color: rgba(204, 34, 41, 0.35);
   color: #ffd9d1;
 }
 
