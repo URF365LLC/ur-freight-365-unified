@@ -16,10 +16,15 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./chat-widget.css" />
+<style>
+.commodity-multi{position:relative;width:100%;color:var(--navy,var(--text,#0a1628))}.commodity-multi__button{width:100%;min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line,rgba(217,226,234,.22));border-radius:16px;padding:14px 15px;background:#fff;color:inherit;font:inherit;text-align:left;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}.commodity-multi__value{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:inherit}.commodity-multi__value.is-placeholder{color:#7a8798}.commodity-multi__chevron{width:10px;height:10px;border-right:2px solid var(--blue,var(--brand-red,#1e6fd9));border-bottom:2px solid var(--blue,var(--brand-red,#1e6fd9));transform:rotate(45deg);transition:transform .18s ease;flex:0 0 auto}.commodity-multi.is-open .commodity-multi__chevron{transform:rotate(225deg)}.commodity-multi__menu{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:40;max-height:320px;overflow:auto;border:1px solid var(--line,rgba(217,226,234,.24));border-radius:18px;background:#fff;box-shadow:0 24px 70px rgba(10,22,40,.22);padding:12px}.commodity-multi.is-open .commodity-multi__menu{display:grid;gap:10px}.commodity-multi__group p{margin:4px 6px 6px;color:#6b7788;font-size:.72rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}.commodity-multi__option{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;color:#14243a;font-weight:800;line-height:1.25;cursor:pointer}.commodity-multi__option:hover{background:#edf5ff}.commodity-multi__option input{width:18px;height:18px;margin:0;accent-color:var(--blue,var(--brand-red,#1e6fd9));box-shadow:none;flex:0 0 auto}.commodity-multi__option.is-disabled{opacity:.5;cursor:not-allowed}.commodity-multi__message{min-height:18px;margin:7px 2px 0;color:var(--blue,var(--brand-red,#1e6fd9));font-size:.8rem;font-weight:850}.commodity-multi__input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}@media(max-width:640px){.commodity-multi__menu{position:static;margin-top:8px;max-height:260px}.commodity-multi__value{white-space:normal}.commodity-multi__option{min-height:44px}}
+
+.commodity-multi{color:var(--text,#fff)}.commodity-multi__button{background:rgba(255,255,255,.06);color:#fff;border-color:var(--line,rgba(217,226,234,.18));box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}.commodity-multi__value.is-placeholder{color:var(--muted,#b6bfcb)}.commodity-multi__menu{background:#111724;border-color:var(--line,rgba(217,226,234,.18));box-shadow:0 26px 86px rgba(0,0,0,.42)}.commodity-multi__group p{color:#9ba8b8}.commodity-multi__option{color:#f7fbff}.commodity-multi__option:hover{background:rgba(255,255,255,.08)}
+</style>
 </head>
 <body>
 <header class="site-header"><a class="brand" href="./index.html"><img class="urf-logo" src="./assets/images/urf365-logo.svg" alt="URF365 logo" loading="eager"><span><strong>UR Freight 365 LLC</strong><small>Houston Freight Command</small></span></a><nav><a href="./services.html">Services</a><a href="./about.html">About</a><a href="./quote.html" aria-current="page">Quote Request</a><a href="./contact.html">Contact</a></nav></header>
-<main><section class="page-hero"><p class="eyebrow">Quote Request</p><h1>Send the freight details your carrier conversation needs.</h1><p class="lead">This static form opens an email draft to UR Freight 365 LLC so your team can send load information directly.</p></section><section class="page-grid"><form class="quote-form" action="mailto:quote@urfreight365llc.com?subject=Freight%20Quote%20Request" method="post" enctype="text/plain"><label class="field"><span>Contact Name</span><input name="Contact Name" autocomplete="name" required></label><label class="field"><span>Company</span><input name="Company" autocomplete="organization" required></label><label class="field"><span>Phone</span><input name="Phone" autocomplete="tel"></label><label class="field"><span>Email</span><input name="Email" type="email" autocomplete="email" required></label><label class="field"><span>Commodity Type</span><select name="Commodity Type" required><option value="">Select commodity type</option><optgroup label="Meat"><option>Beef</option><option>Pork</option><option>Chicken</option><option>Poultry</option><option>Lamb</option></optgroup><optgroup label="Seafood"><option>Shrimp</option><option>Crawfish</option><option>Red Snapper</option><option>Tilapia</option><option>Salmon</option><option>Other Seafood</option></optgroup><optgroup label="Produce"><option>Fruits</option><option>Vegetables</option><option>Mixed Produce</option></optgroup><optgroup label="Dairy"><option>Milk</option><option>Cheese</option><option>Butter</option><option>Other Dairy</option></optgroup><optgroup label="Frozen"><option>Frozen Meals</option><option>Ice Cream</option><option>Other Frozen</option></optgroup><optgroup label="Other"><option>Floral</option><option>Pharma/Medical</option><option>Other Temperature-Controlled</option></optgroup></select></label><label class="field"><span>Pickup City, State, Shipper, And Dock Hours</span><textarea name="Pickup Details" placeholder="Pickup city, state, shipper, and dock hours" required></textarea></label><label class="field"><span>Delivery City, State, Receiver, And Appointment</span><textarea name="Delivery Details" placeholder="Delivery city, state, receiver, and appointment" required></textarea></label><label class="field"><span>Pickup Date Or Window</span><input name="Pickup Date Start" type="date" required></label><label class="field"><span>Pickup Window End</span><input name="Pickup Date End" type="date"></label><label class="field"><span>Delivery Date Or Appointment</span><input name="Delivery Date Start" type="date"></label><label class="field"><span>Delivery Window End</span><input name="Delivery Date End" type="date"></label><label class="field"><span>Temperature Requirement</span><select name="Temperature Requirement" required><option value="">Select temperature requirement</option><option>Chilled</option><option>Frozen</option><option>Freeze Protect</option><option>Deep Frozen (-10°F)</option></select></label><label class="field"><span>Drop And Hook</span><select name="Drop And Hook"><option>No drop and hook needed</option><option>Drop and hook requested</option><option>Drop and hook required</option></select></label><label class="field"><span>Drop And Trade</span><select name="Drop And Trade"><option>No drop and trade needed</option><option>Drop and trade requested</option><option>Drop and trade required</option></select></label><label class="field full"><span>Special Instructions</span><textarea name="Special Instructions" placeholder="Plant rules, seal notes, washout, receiver hours, monitoring, handling, equipment, or special requirements" required></textarea></label><div class="form-actions full"><button class="button primary" type="submit">Submit Quote Request</button><a class="button secondary" href="mailto:quote@urfreight365llc.com?subject=Freight%20Quote%20Request">Email Directly</a></div><p class="form-note full">For fastest quoting, include commodity type, pickup and delivery appointments, temperature requirement, and any drop/hook or drop/trade needs.</p><p class="muted">For urgent loads, call 346-522-2772. Your load details are used only to follow up on this freight quote request.</p></form><aside class="command-card"><p>Quote checklist</p><h2>Better details create faster answers.</h2><ul><li>Steel, pipe, OCTG, machinery, or industrial freight</li><li>Pickup and delivery windows</li><li>Weight, length, width, height, and packaging</li><li>Contact person for shipping or receiving</li></ul></aside></section></main><footer class="site-footer">
+<main><section class="page-hero"><p class="eyebrow">Quote Request</p><h1>Send the freight details your carrier conversation needs.</h1><p class="lead">This static form opens an email draft to UR Freight 365 LLC so your team can send load information directly.</p></section><section class="page-grid"><form class="quote-form" action="mailto:quote@urfreight365llc.com?subject=Freight%20Quote%20Request" method="post" enctype="text/plain"><label class="field"><span>Contact Name</span><input name="Contact Name" autocomplete="name" required></label><label class="field"><span>Company</span><input name="Company" autocomplete="organization" required></label><label class="field"><span>Phone</span><input name="Phone" autocomplete="tel"></label><label class="field"><span>Email</span><input name="Email" type="email" autocomplete="email" required></label><label class="field"><span>Commodity Type</span><input class="commodity-multi__input" type="hidden" name="Commodity Type" required><div class="commodity-multi" data-max="5"><button class="commodity-multi__button" type="button" aria-expanded="false"><span class="commodity-multi__value">Select up to 5 commodities</span><span class="commodity-multi__chevron" aria-hidden="true"></span></button><div class="commodity-multi__menu" role="group" aria-label="Commodity Type options"><div class="commodity-multi__group"><p>Meat</p><label class="commodity-multi__option"><input type="checkbox" value="Beef"><span>Beef</span></label><label class="commodity-multi__option"><input type="checkbox" value="Pork"><span>Pork</span></label><label class="commodity-multi__option"><input type="checkbox" value="Chicken"><span>Chicken</span></label><label class="commodity-multi__option"><input type="checkbox" value="Poultry"><span>Poultry</span></label><label class="commodity-multi__option"><input type="checkbox" value="Lamb"><span>Lamb</span></label></div><div class="commodity-multi__group"><p>Seafood</p><label class="commodity-multi__option"><input type="checkbox" value="Shrimp"><span>Shrimp</span></label><label class="commodity-multi__option"><input type="checkbox" value="Crawfish"><span>Crawfish</span></label><label class="commodity-multi__option"><input type="checkbox" value="Red Snapper"><span>Red Snapper</span></label><label class="commodity-multi__option"><input type="checkbox" value="Tilapia"><span>Tilapia</span></label><label class="commodity-multi__option"><input type="checkbox" value="Salmon"><span>Salmon</span></label><label class="commodity-multi__option"><input type="checkbox" value="Other Seafood"><span>Other Seafood</span></label></div><div class="commodity-multi__group"><p>Produce</p><label class="commodity-multi__option"><input type="checkbox" value="Fruits"><span>Fruits</span></label><label class="commodity-multi__option"><input type="checkbox" value="Vegetables"><span>Vegetables</span></label><label class="commodity-multi__option"><input type="checkbox" value="Mixed Produce"><span>Mixed Produce</span></label></div><div class="commodity-multi__group"><p>Dairy</p><label class="commodity-multi__option"><input type="checkbox" value="Milk"><span>Milk</span></label><label class="commodity-multi__option"><input type="checkbox" value="Cheese"><span>Cheese</span></label><label class="commodity-multi__option"><input type="checkbox" value="Butter"><span>Butter</span></label><label class="commodity-multi__option"><input type="checkbox" value="Other Dairy"><span>Other Dairy</span></label></div><div class="commodity-multi__group"><p>Frozen</p><label class="commodity-multi__option"><input type="checkbox" value="Frozen Meals"><span>Frozen Meals</span></label><label class="commodity-multi__option"><input type="checkbox" value="Ice Cream"><span>Ice Cream</span></label><label class="commodity-multi__option"><input type="checkbox" value="Other Frozen"><span>Other Frozen</span></label></div><div class="commodity-multi__group"><p>Other</p><label class="commodity-multi__option"><input type="checkbox" value="Floral"><span>Floral</span></label><label class="commodity-multi__option"><input type="checkbox" value="Pharma/Medical"><span>Pharma/Medical</span></label><label class="commodity-multi__option"><input type="checkbox" value="Other Temperature-Controlled"><span>Other Temperature-Controlled</span></label></div></div><p class="commodity-multi__message" aria-live="polite"></p></div></label><label class="field"><span>Pickup City, State, Shipper, And Dock Hours</span><textarea name="Pickup Details" placeholder="Pickup city, state, shipper, and dock hours" required></textarea></label><label class="field"><span>Delivery City, State, Receiver, And Appointment</span><textarea name="Delivery Details" placeholder="Delivery city, state, receiver, and appointment" required></textarea></label><label class="field"><span>Pickup Date Or Window</span><input name="Pickup Date Start" type="date" required></label><label class="field"><span>Pickup Window End</span><input name="Pickup Date End" type="date"></label><label class="field"><span>Delivery Date Or Appointment</span><input name="Delivery Date Start" type="date"></label><label class="field"><span>Delivery Window End</span><input name="Delivery Date End" type="date"></label><label class="field"><span>Temperature Requirement</span><select name="Temperature Requirement" required><option value="">Select temperature requirement</option><option>Chilled</option><option>Frozen</option><option>Freeze Protect</option><option>Deep Frozen (-10°F)</option></select></label><label class="field"><span>Drop And Hook</span><select name="Drop And Hook"><option>No drop and hook needed</option><option>Drop and hook requested</option><option>Drop and hook required</option></select></label><label class="field"><span>Drop And Trade</span><select name="Drop And Trade"><option>No drop and trade needed</option><option>Drop and trade requested</option><option>Drop and trade required</option></select></label><label class="field full"><span>Special Instructions</span><textarea name="Special Instructions" placeholder="Plant rules, seal notes, washout, receiver hours, monitoring, handling, equipment, or special requirements" required></textarea></label><div class="form-actions full"><button class="button primary" type="submit">Submit Quote Request</button><a class="button secondary" href="mailto:quote@urfreight365llc.com?subject=Freight%20Quote%20Request">Email Directly</a></div><p class="form-note full">For fastest quoting, include commodity type, pickup and delivery appointments, temperature requirement, and any drop/hook or drop/trade needs.</p><p class="muted">For urgent loads, call 346-522-2772. Your load details are used only to follow up on this freight quote request.</p></form><aside class="command-card"><p>Quote checklist</p><h2>Better details create faster answers.</h2><ul><li>Steel, pipe, OCTG, machinery, or industrial freight</li><li>Pickup and delivery windows</li><li>Weight, length, width, height, and packaging</li><li>Contact person for shipping or receiving</li></ul></aside></section></main><footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__brand">
       <div>
@@ -57,4 +62,82 @@
   <div class="site-footer__bottom"><div class="site-footer__bottom-inner"><span>© 2026 UR Freight 365 LLC. All rights reserved.</span><span>Licensed broker partner: Booking Logistics LLC | MC-1503468</span></div></div>
 </footer>
   <script src="./chat-widget.js" defer></script>
+
+<script>
+(() => {
+  const closeAll = (except) => document.querySelectorAll('.commodity-multi.is-open').forEach((multi) => {
+    if (multi !== except) {
+      multi.classList.remove('is-open');
+      multi.querySelector('.commodity-multi__button')?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  const refresh = (multi) => {
+    const max = Number(multi.dataset.max || 5);
+    const hidden = multi.previousElementSibling?.classList.contains('commodity-multi__input') ? multi.previousElementSibling : null;
+    const boxes = [...multi.querySelectorAll('input[type="checkbox"]')];
+    const selected = boxes.filter((box) => box.checked).map((box) => box.value);
+    const value = multi.querySelector('.commodity-multi__value');
+    const message = multi.querySelector('.commodity-multi__message');
+
+    if (hidden) hidden.value = selected.join(', ');
+    if (value) {
+      value.textContent = selected.length ? selected.join(', ') : `Select up to ${max} commodities`;
+      value.classList.toggle('is-placeholder', !selected.length);
+    }
+    boxes.forEach((box) => box.closest('.commodity-multi__option')?.classList.toggle('is-disabled', !box.checked && selected.length >= max));
+    if (message && selected.length < max) message.textContent = '';
+  };
+
+  document.querySelectorAll('.commodity-multi').forEach((multi) => {
+    const max = Number(multi.dataset.max || 5);
+    const button = multi.querySelector('.commodity-multi__button');
+    const message = multi.querySelector('.commodity-multi__message');
+    refresh(multi);
+
+    button?.addEventListener('click', () => {
+      const isOpen = multi.classList.toggle('is-open');
+      button.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) closeAll(multi);
+    });
+
+    multi.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+      box.addEventListener('change', () => {
+        const selectedCount = multi.querySelectorAll('input[type="checkbox"]:checked').length;
+        if (selectedCount > max) {
+          box.checked = false;
+          if (message) message.textContent = `Maximum ${max} commodities selected`;
+          return;
+        }
+        refresh(multi);
+      });
+    });
+  });
+
+  document.querySelectorAll('form').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      const emptyMulti = [...form.querySelectorAll('.commodity-multi')].find((multi) => {
+        const hidden = multi.previousElementSibling?.classList.contains('commodity-multi__input') ? multi.previousElementSibling : null;
+        return hidden?.hasAttribute('required') && !hidden.value.trim();
+      });
+      if (!emptyMulti) return;
+
+      event.preventDefault();
+      emptyMulti.classList.add('is-open');
+      emptyMulti.querySelector('.commodity-multi__button')?.setAttribute('aria-expanded', 'true');
+      emptyMulti.querySelector('.commodity-multi__message').textContent = 'Select at least 1 commodity';
+      emptyMulti.querySelector('.commodity-multi__button')?.focus();
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.commodity-multi')) closeAll();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeAll();
+  });
+})();
+</script>
+
 </body></html>
