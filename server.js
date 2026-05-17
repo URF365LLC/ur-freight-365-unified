@@ -1,105 +1,393 @@
 const express = require("express");
 const path = require("path");
+const { randomUUID } = require("crypto");
+const { Pool } = require("pg");
 
 const app = express();
 const port = process.env.PORT || 3000;
 const ollamaEndpoint = process.env.OLLAMA_ENDPOINT || "https://ollama.com/v1/chat/completions";
 const ollamaModel = process.env.OLLAMA_MODEL || "llama3.2";
+const databaseUrl = process.env.DATABASE_URL;
 
-const systemPrompt = `You are the UR Freight 365 customer service assistant. Answer as a concise, professional freight expert for UR Freight 365 LLC. Help shippers with refrigerated and reefer freight, produce transport, steel and flatbed hauling, logistics, LTL, port, warehouse, cross-border, and US domestic lane questions. Explain what details are needed for rates, including origin, destination, commodity, weight, dimensions, equipment, temperature, pickup date, delivery window, tarping, appointments, and special handling. For produce, mention temperature range, pulp temperature, packaging, pre-cooling, reefer settings, and appointment timing when relevant. For steel and flatbed, mention dimensions, weight, tarps, chains/straps, loading method, and site requirements. You may discuss general lead times and qualification questions, but do not guarantee rates, capacity, delivery times, legal advice, or regulated compliance. Encourage urgent or quote-ready loads to call 346-522-2772 or email quotes@urfreight365.com.`;
+const pool = databaseUrl
+  ? new Pool({
+      connectionString: databaseUrl,
+      ssl: databaseUrl.includes("railway") || process.env.PGSSLMODE === "require" ? { rejectUnauthorized: false } : undefined,
+    })
+  : null;
 
-function buildFreightFallbackAnswer(messages) {
-  const lastUserMessage = [...messages].reverse().find((message) => message.role === "user")?.content || "";
-  const text = lastUserMessage.toLowerCase();
-  const contact = "For a confirmed quote, call 346-522-2772 or email quotes@urfreight365.com.";
+const baseSystemPrompt = `You are the UR Freight 365 customer service and sales assistant. Speak for UR Freight 365 LLC in a corporate, professional, warm, and practical tone. You are not robotic, pushy, or casual. UR Freight 365 handles reefer and produce freight, steel, flatbed, OCTG, pipe, LTL, port and warehouse moves, cross-border freight, and domestic lanes. Contact information: call 346-522-2772 or email quotes@urfreight365.com.
 
-  if (/\b(rate|quote|price|cost|bid)\b/.test(text)) {
-    return `To build a freight rate, UR Freight 365 needs origin, destination, commodity, weight, dimensions or pallet count, equipment type, pickup date, delivery window, and any appointment or special handling details. ${contact}`;
+Your goal is to professionally qualify the customer and guide them toward calling or emailing UR Freight 365 for a confirmed quote. Ask for the details needed to qualify the shipment: freight type, commodity, origin, destination, weight, dimensions or pallet count, equipment, temperature if refrigerated, pickup date, delivery timeline, appointments, site constraints, tarps, loading method, and any special handling. Do not guarantee rates, capacity, transit times, legal advice, or compliance outcomes. If the customer is quote-ready or urgent, clearly recommend calling 346-522-2772 or emailing quotes@urfreight365.com. Keep responses concise, specific, and helpful.`;
+
+const contact = "For a confirmed quote, call 346-522-2772 or email quotes@urfreight365.com.";
+
+async function runMigrations() {
+  if (!pool) {
+    console.warn("DATABASE_URL is not set; chat persistence is disabled.");
+    return;
   }
 
-  if (/(reefer|refrigerated|produce|cold|temperature|temp|pulp)/.test(text)) {
-    return `Yes. UR Freight 365 supports refrigerated and produce freight. Please share commodity, temperature setting, pulp temperature if available, packaging, pallet count, pickup and delivery appointments, and whether the product is pre-cooled. ${contact}`;
-  }
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS conversations (
+      id SERIAL PRIMARY KEY,
+      session_id TEXT UNIQUE NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      customer_ip TEXT,
+      page_url TEXT
+    );
 
-  if (/(steel|pipe|flatbed|tarp|chain|strap|oversize)/.test(text)) {
-    return `For steel, pipe, and flatbed freight, UR Freight 365 needs piece count, length, width, height, total weight, loading method, tarp requirements, chains or straps needed, and site access details. ${contact}`;
-  }
+    CREATE TABLE IF NOT EXISTS messages (
+      id SERIAL PRIMARY KEY,
+      conversation_id INTEGER NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+      role TEXT NOT NULL CHECK (role IN ('user', 'assistant')),
+      content TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
 
-  if (/(ltl|partial|logistics|warehouse|port|dray|cross.?border|lane)/.test(text)) {
-    return `UR Freight 365 can help with LTL, partials, port, warehouse, cross-border, and domestic lane planning. Share origin, destination, freight type, timing, and any dock, appointment, or paperwork requirements. ${contact}`;
-  }
+    CREATE TABLE IF NOT EXISTS leads (
+      id SERIAL PRIMARY KEY,
+      conversation_id INTEGER UNIQUE NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+      name TEXT,
+      email TEXT,
+      phone TEXT,
+      company TEXT,
+      freight_type TEXT,
+      origin TEXT,
+      destination TEXT,
+      weight TEXT,
+      captured_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
 
-  return `UR Freight 365 helps with reefer and produce freight, steel and flatbed hauling, LTL, port, warehouse, cross-border, and domestic lanes. Send the shipment details you have, and the team can guide the next step. ${contact}`;
+    CREATE INDEX IF NOT EXISTS idx_messages_conversation_created_at ON messages(conversation_id, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_conversations_updated_at ON conversations(updated_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_leads_captured_at ON leads(captured_at DESC);
+  `);
+
+  console.log("Database migrations complete.");
 }
 
-app.use(express.json({ limit: "32kb" }));
+function sanitizeSessionId(value) {
+  const sessionId = typeof value === "string" ? value.trim() : "";
+  return sessionId && sessionId.length <= 120 ? sessionId : `server-${randomUUID()}`;
+}
 
-app.post("/api/freight-assistant", async (request, response) => {
-  const apiKey = process.env.Ollama_URF365 || process.env.OLLAMA_API_KEY;
+function sanitizePageUrl(value) {
+  if (typeof value !== "string") return null;
+  return value.trim().slice(0, 1000) || null;
+}
 
-  const messages = Array.isArray(request.body?.messages) ? request.body.messages : [];
-  const sanitizedMessages = messages
+function getCustomerIp(request) {
+  const forwarded = request.headers["x-forwarded-for"];
+  if (typeof forwarded === "string" && forwarded.trim()) return forwarded.split(",")[0].trim();
+  return request.ip || request.socket?.remoteAddress || null;
+}
+
+async function getOrCreateConversation({ sessionId, customerIp, pageUrl }) {
+  if (!pool) return null;
+
+  const result = await pool.query(
+    `INSERT INTO conversations (session_id, customer_ip, page_url)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (session_id) DO UPDATE SET
+       updated_at = NOW(),
+       customer_ip = COALESCE(EXCLUDED.customer_ip, conversations.customer_ip),
+       page_url = COALESCE(EXCLUDED.page_url, conversations.page_url)
+     RETURNING *`,
+    [sessionId, customerIp, pageUrl]
+  );
+
+  return result.rows[0];
+}
+
+async function saveMessage(conversationId, role, content) {
+  if (!pool || !conversationId || !content) return;
+  await pool.query("INSERT INTO messages (conversation_id, role, content) VALUES ($1, $2, $3)", [conversationId, role, content]);
+  await pool.query("UPDATE conversations SET updated_at = NOW() WHERE id = $1", [conversationId]);
+}
+
+async function getRecentMessages(conversationId, limit = 10) {
+  if (!pool || !conversationId) return [];
+  const result = await pool.query(
+    `SELECT role, content, created_at
+     FROM messages
+     WHERE conversation_id = $1
+     ORDER BY created_at DESC, id DESC
+     LIMIT $2`,
+    [conversationId, limit]
+  );
+  return result.rows.reverse().map((message) => ({ role: message.role, content: message.content }));
+}
+
+async function getLead(conversationId) {
+  if (!pool || !conversationId) return null;
+  const result = await pool.query("SELECT * FROM leads WHERE conversation_id = $1", [conversationId]);
+  return result.rows[0] || null;
+}
+
+function firstMatch(text, pattern) {
+  const match = text.match(pattern);
+  return match?.[1]?.trim().replace(/[.,;:!?]+$/, "") || null;
+}
+
+function detectFreightType(text) {
+  const checks = [
+    [/(reefer|refrigerated|produce|cold chain|frozen|temperature)/i, "Reefer / produce"],
+    [/(steel|pipe|octg|flatbed|open deck|tarp|chains?)/i, "Steel / flatbed"],
+    [/(ltl|partial|less than truckload)/i, "LTL / partial"],
+    [/(port|drayage|container|warehouse)/i, "Port / warehouse"],
+    [/(cross.?border|mexico|canada|border)/i, "Cross-border"],
+  ];
+  return checks.find(([pattern]) => pattern.test(text))?.[1] || null;
+}
+
+function extractLeadInfo(messages) {
+  const text = messages.map((message) => message.content).join("\n");
+  const compact = text.replace(/\s+/g, " ");
+  const email = firstMatch(compact, /\b([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b/i);
+  const phone = firstMatch(compact, /(?:\+?1[\s.-]?)?(\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})\b/);
+  const name = firstMatch(compact, /(?:my name is|this is|i am|i'm|name is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/i);
+  const company = firstMatch(compact, /(?:company is|from|with|at)\s+([A-Z][A-Z0-9&.,' -]{2,60})(?=\s+(?:and|we|i|email|phone|need|have|moving|shipping)|[.,;]|$)/i);
+  const origin = firstMatch(compact, /(?:from|origin(?: is)?|pickup(?: in)?)\s+([A-Z][A-Za-z .'-]+,?\s+[A-Z]{2}|[A-Z][A-Za-z .'-]+)(?=\s+(?:to|into|going|delivery|dest|with|for|on|and)|[.,;]|$)/i);
+  const destination = firstMatch(compact, /(?:to|destination(?: is)?|deliver(?:y)?(?: in| to)?)\s+([A-Z][A-Za-z .'-]+,?\s+[A-Z]{2}|[A-Z][A-Za-z .'-]+)(?=\s+(?:with|for|on|and|pickup|weight)|[.,;]|$)/i);
+  const weight = firstMatch(compact, /\b(\d{1,3}(?:,\d{3})*|\d+)\s*(?:lbs?|pounds?|lb|tons?)\b/i);
+  const freightType = detectFreightType(compact);
+
+  return { name, email, phone, company, freight_type: freightType, origin, destination, weight };
+}
+
+async function upsertLead(conversationId, leadInfo) {
+  if (!pool || !conversationId) return null;
+  const values = [
+    conversationId,
+    leadInfo.name,
+    leadInfo.email,
+    leadInfo.phone,
+    leadInfo.company,
+    leadInfo.freight_type,
+    leadInfo.origin,
+    leadInfo.destination,
+    leadInfo.weight,
+  ];
+
+  const hasAnyLeadData = values.slice(1).some(Boolean);
+  if (!hasAnyLeadData) return getLead(conversationId);
+
+  const result = await pool.query(
+    `INSERT INTO leads (conversation_id, name, email, phone, company, freight_type, origin, destination, weight)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+     ON CONFLICT (conversation_id) DO UPDATE SET
+       name = COALESCE(EXCLUDED.name, leads.name),
+       email = COALESCE(EXCLUDED.email, leads.email),
+       phone = COALESCE(EXCLUDED.phone, leads.phone),
+       company = COALESCE(EXCLUDED.company, leads.company),
+       freight_type = COALESCE(EXCLUDED.freight_type, leads.freight_type),
+       origin = COALESCE(EXCLUDED.origin, leads.origin),
+       destination = COALESCE(EXCLUDED.destination, leads.destination),
+       weight = COALESCE(EXCLUDED.weight, leads.weight),
+       captured_at = NOW()
+     RETURNING *`,
+    values
+  );
+
+  return result.rows[0];
+}
+
+function needsContactNudge(userExchangeCount, lead) {
+  return userExchangeCount >= 3 && !(lead?.email || lead?.phone);
+}
+
+function buildSystemPrompt({ recentMessages, lead, shouldNudge }) {
+  const history = recentMessages
+    .map((message) => `${message.role === "user" ? "Customer" : "Assistant"}: ${message.content}`)
+    .join("\n")
+    .slice(-6000);
+  const knownLead = lead
+    ? [
+        lead.name && `Name: ${lead.name}`,
+        lead.email && `Email: ${lead.email}`,
+        lead.phone && `Phone: ${lead.phone}`,
+        lead.company && `Company: ${lead.company}`,
+        lead.freight_type && `Freight type: ${lead.freight_type}`,
+        lead.origin && `Origin: ${lead.origin}`,
+        lead.destination && `Destination: ${lead.destination}`,
+        lead.weight && `Weight: ${lead.weight}`,
+      ]
+        .filter(Boolean)
+        .join("; ")
+    : "None yet";
+
+  return `${baseSystemPrompt}\n\nKnown lead details: ${knownLead || "None yet"}.\n${
+    shouldNudge
+      ? "The conversation has reached at least three customer exchanges and no email or phone is captured. Naturally ask for the customer's name and best phone or email so UR Freight 365 can follow up."
+      : ""
+  }\nRecent conversation history for memory/context:\n${history || "No prior messages."}`;
+}
+
+function buildFreightFallbackAnswer({ messages, lead, shouldNudge }) {
+  const lastUserMessage = [...messages].reverse().find((message) => message.role === "user")?.content || "";
+  const text = lastUserMessage.toLowerCase();
+  const contactNudge = shouldNudge ? " Also, what is your name and the best phone or email for follow-up?" : "";
+
+  if (/\b(rate|quote|price|cost|bid)\b/.test(text)) {
+    return `I can help qualify that quote. Please share origin, destination, commodity, total weight, dimensions or pallet count, equipment type, pickup date, delivery window, and any appointment or special handling details. ${contact}${contactNudge}`;
+  }
+
+  if (/(reefer|refrigerated|produce|cold|temperature|temp|pulp|frozen)/.test(text)) {
+    return `Yes. UR Freight 365 supports refrigerated and produce freight, including temperature-sensitive lanes. Please share commodity, temperature setting, pulp temperature if available, packaging, pallet count, pickup and delivery appointments, and whether the product is pre-cooled. ${contact}${contactNudge}`;
+  }
+
+  if (/(steel|pipe|flatbed|tarp|chain|strap|oversize|octg|open deck)/.test(text)) {
+    return `For steel, pipe, OCTG, and flatbed freight, UR Freight 365 will need piece count, length, width, height, total weight, loading method, tarp requirements, securement needs, and site access details. ${contact}${contactNudge}`;
+  }
+
+  if (/(ltl|partial|logistics|warehouse|port|dray|cross.?border|lane|container)/.test(text)) {
+    return `UR Freight 365 can help with LTL, partials, port, warehouse, cross-border, and domestic lane planning. Share origin, destination, freight type, timing, and any dock, appointment, or paperwork requirements. ${contact}${contactNudge}`;
+  }
+
+  if (lead?.freight_type || lead?.origin || lead?.destination) {
+    return `Thanks — I can help qualify this further. To move toward a confirmed quote, please add any missing details: commodity, weight, dimensions or pallet count, pickup date, delivery timeline, equipment needs, and special handling. ${contact}${contactNudge}`;
+  }
+
+  return `UR Freight 365 helps with reefer and produce freight, steel and flatbed hauling, LTL, port, warehouse, cross-border, and domestic lanes. Send the shipment details you have, and I will help qualify the next step. ${contact}${contactNudge}`;
+}
+
+function normalizeInboundMessages(messages) {
+  return messages
     .filter((message) => ["assistant", "user"].includes(message?.role) && typeof message?.content === "string")
     .slice(-10)
     .map((message) => ({
       role: message.role,
       content: message.content.slice(0, 2000),
     }));
+}
 
-  if (!sanitizedMessages.some((message) => message.role === "user" && message.content.trim())) {
+app.use(express.json({ limit: "32kb" }));
+
+app.post("/api/freight-assistant", async (request, response) => {
+  const apiKey = process.env.Ollama_URF365 || process.env.OLLAMA_API_KEY;
+  const inboundMessages = Array.isArray(request.body?.messages) ? request.body.messages : [];
+  const sanitizedMessages = normalizeInboundMessages(inboundMessages);
+  const latestUserMessage = [...sanitizedMessages].reverse().find((message) => message.role === "user" && message.content.trim());
+
+  if (!latestUserMessage) {
     return response.status(400).json({ error: "A user message is required." });
   }
 
-  if (!apiKey) {
-    return response.json({
-      answer: buildFreightFallbackAnswer(sanitizedMessages),
-      source: "fallback",
-    });
-  }
+  const sessionId = sanitizeSessionId(request.body?.session_id || request.body?.sessionId);
+  const pageUrl = sanitizePageUrl(request.body?.page_url || request.body?.pageUrl);
+  const customerIp = getCustomerIp(request);
 
   try {
-    const ollamaResponse = await fetch(ollamaEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: request.body?.model || ollamaModel,
-        temperature: 0.35,
-        max_tokens: 420,
-        messages: [{ role: "system", content: systemPrompt }, ...sanitizedMessages],
-      }),
-    });
+    const conversation = await getOrCreateConversation({ sessionId, customerIp, pageUrl });
 
-    if (!ollamaResponse.ok) {
-      const detail = await ollamaResponse.text().catch(() => "");
-      console.error("Ollama API request failed", {
-        status: ollamaResponse.status,
-        endpoint: ollamaEndpoint,
-        detail,
-      });
-      return response.json({
-        answer: buildFreightFallbackAnswer(sanitizedMessages),
-        source: "fallback",
-      });
+    if (conversation) {
+      await saveMessage(conversation.id, "user", latestUserMessage.content.trim());
     }
 
-    const data = await ollamaResponse.json();
-    const answer = data?.choices?.[0]?.message?.content?.trim();
+    const recentMessages = conversation ? await getRecentMessages(conversation.id, 10) : sanitizedMessages;
+    const userExchangeCount = recentMessages.filter((message) => message.role === "user").length;
+    const extractedLead = extractLeadInfo(recentMessages);
+    let lead = conversation ? await upsertLead(conversation.id, extractedLead) : extractedLead;
+    const shouldNudge = needsContactNudge(userExchangeCount, lead);
+    const systemPrompt = buildSystemPrompt({ recentMessages, lead, shouldNudge });
+    let answer;
+    let source = "ollama";
+
+    if (apiKey) {
+      try {
+        const ollamaResponse = await fetch(ollamaEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: request.body?.model || ollamaModel,
+            temperature: 0.35,
+            max_tokens: 420,
+            messages: [{ role: "system", content: systemPrompt }, ...recentMessages],
+          }),
+        });
+
+        if (ollamaResponse.ok) {
+          const data = await ollamaResponse.json();
+          answer = data?.choices?.[0]?.message?.content?.trim();
+        } else {
+          const detail = await ollamaResponse.text().catch(() => "");
+          console.error("Ollama API request failed", { status: ollamaResponse.status, endpoint: ollamaEndpoint, detail });
+        }
+      } catch (error) {
+        console.error("Ollama request failed", { endpoint: ollamaEndpoint, detail: error.message });
+      }
+    }
+
+    if (!answer) {
+      source = "fallback";
+      answer = buildFreightFallbackAnswer({ messages: recentMessages, lead, shouldNudge });
+    }
+
+    if (conversation) {
+      await saveMessage(conversation.id, "assistant", answer);
+      lead = await upsertLead(conversation.id, extractLeadInfo([...recentMessages, { role: "assistant", content: answer }]));
+    }
 
     return response.json({
-      answer: answer || "I could not generate a response. Please call 346-522-2772 or email quotes@urfreight365.com.",
+      answer,
+      source,
+      session_id: sessionId,
+      conversation_id: conversation?.id || null,
+      lead_captured: Boolean(lead?.email || lead?.phone || lead?.name),
     });
   } catch (error) {
-    console.error("Freight assistant request failed", {
-      endpoint: ollamaEndpoint,
-      detail: error.message,
-    });
+    console.error("Freight assistant request failed", { detail: error.message });
     return response.json({
-      answer: buildFreightFallbackAnswer(sanitizedMessages),
+      answer: buildFreightFallbackAnswer({ messages: sanitizedMessages, lead: null, shouldNudge: false }),
       source: "fallback",
+      session_id: sessionId,
     });
+  }
+});
+
+app.get("/api/leads", async (request, response) => {
+  if (!pool) return response.status(503).json({ error: "DATABASE_URL is not configured." });
+
+  try {
+    const result = await pool.query(
+      `SELECT leads.*, conversations.session_id, conversations.page_url, conversations.updated_at AS conversation_updated_at
+       FROM leads
+       JOIN conversations ON conversations.id = leads.conversation_id
+       ORDER BY leads.captured_at DESC
+       LIMIT 100`
+    );
+    return response.json({ leads: result.rows });
+  } catch (error) {
+    console.error("Failed to fetch leads", { detail: error.message });
+    return response.status(500).json({ error: "Failed to fetch leads." });
+  }
+});
+
+app.get("/api/conversations", async (request, response) => {
+  if (!pool) return response.status(503).json({ error: "DATABASE_URL is not configured." });
+
+  try {
+    const result = await pool.query(
+      `SELECT c.id, c.session_id, c.created_at, c.updated_at, c.customer_ip, c.page_url,
+              COUNT(m.id)::int AS message_count,
+              MAX(CASE WHEN m.role = 'user' THEN m.content END) AS latest_user_message,
+              l.name, l.email, l.phone, l.company, l.freight_type, l.origin, l.destination, l.weight
+       FROM conversations c
+       LEFT JOIN messages m ON m.conversation_id = c.id
+       LEFT JOIN leads l ON l.conversation_id = c.id
+       GROUP BY c.id, l.id
+       ORDER BY c.updated_at DESC
+       LIMIT 100`
+    );
+    return response.json({ conversations: result.rows });
+  } catch (error) {
+    console.error("Failed to fetch conversations", { detail: error.message });
+    return response.status(500).json({ error: "Failed to fetch conversations." });
   }
 });
 
@@ -109,6 +397,13 @@ app.get("*", (request, response) => {
   response.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.listen(port, () => {
-  console.log(`UR Freight 365 site listening on port ${port}`);
-});
+runMigrations()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`UR Freight 365 site listening on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Database migration failed", { detail: error.message });
+    process.exit(1);
+  });

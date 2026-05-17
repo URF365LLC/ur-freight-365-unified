@@ -105,6 +105,29 @@
   font-size: 0.82rem;
 }
 
+.urf-chat-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 9px 0 0;
+  color: #9fe7bd;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.urf-chat-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 4px rgba(159, 231, 189, 0.12);
+}
+
+.urf-chat-widget.is-busy .urf-chat-status {
+  color: #91d0ff;
+}
+
 .urf-chat-close {
   appearance: none;
   width: 36px;
@@ -149,6 +172,14 @@
   background: linear-gradient(135deg, #39a8ff, #1265a5);
   color: #fff;
   border-bottom-right-radius: 6px;
+}
+
+.urf-chat-phone-link,
+.urf-chat-disclaimer a {
+  color: #bfe5ff;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .urf-chat-message.error {
