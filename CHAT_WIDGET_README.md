@@ -68,4 +68,4 @@ The system prompt makes the assistant focus on UR Freight 365 services:
 - Logistics, LTL, port, warehouse, and cross-border support
 - US domestic lane questions, lead times, load qualification, and quote intake
 
-The assistant is designed to keep answers concise, avoid guarantees, and route urgent or quote-ready freight to `522-793-4076` or `quote@yourfreight365llc.com`.
+The assistant is designed to keep answers concise, avoid guarantees, and route urgent or quote-ready freight to `346-522-2772` or `quotes@urfreight365.com`.
