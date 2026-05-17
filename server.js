@@ -143,18 +143,29 @@ function detectFreightType(text) {
 }
 
 function extractLeadInfo(messages) {
-  const text = messages.map((message) => message.content).join("\n");
+  const text = messages.filter((message) => message.role === "user").map((message) => message.content).join("\n");
   const compact = text.replace(/\s+/g, " ");
   const email = firstMatch(compact, /\b([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b/i);
   const phone = firstMatch(compact, /(?:\+?1[\s.-]?)?(\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})\b/);
-  const name = firstMatch(compact, /(?:my name is|this is|i am|i'm|name is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/i);
+  const name = firstMatch(compact, /(?:my name is|this is|i am|i'm|name is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})(?=\s+(?:with|from|at|and|email|phone|need|looking)|[.,;]|$)/i);
   const company = firstMatch(compact, /(?:company is|from|with|at)\s+([A-Z][A-Z0-9&.,' -]{2,60})(?=\s+(?:and|we|i|email|phone|need|have|moving|shipping)|[.,;]|$)/i);
-  const origin = firstMatch(compact, /(?:from|origin(?: is)?|pickup(?: in)?)\s+([A-Z][A-Za-z .'-]+,?\s+[A-Z]{2}|[A-Z][A-Za-z .'-]+)(?=\s+(?:to|into|going|delivery|dest|with|for|on|and)|[.,;]|$)/i);
+  const lane = compact.match(/(?:from|origin(?: is)?|pickup(?: in)?)\s+(.+?)\s+(?:to|into|going to|deliver(?:y)?(?: in| to)?|destination(?: is)?)\s+(.+?)(?=\s+(?:with|for|on|and|pickup|weight|call|email)|[.,;]|$)/i);
+  const origin = lane?.[1]?.trim().replace(/[.,;:!?]+$/, "") || firstMatch(compact, /(?:from|origin(?: is)?|pickup(?: in)?)\s+([A-Z][A-Za-z .'-]+,?\s+[A-Z]{2}|[A-Z][A-Za-z .'-]+)(?=\s+(?:to|into|going|delivery|dest|with|for|on|and)|[.,;]|$)/i);
+  const laneDestination = lane?.[2]?.trim().replace(/[.,;:!?]+$/, "") || null;
   const destination = firstMatch(compact, /(?:to|destination(?: is)?|deliver(?:y)?(?: in| to)?)\s+([A-Z][A-Za-z .'-]+,?\s+[A-Z]{2}|[A-Z][A-Za-z .'-]+)(?=\s+(?:with|for|on|and|pickup|weight)|[.,;]|$)/i);
   const weight = firstMatch(compact, /\b(\d{1,3}(?:,\d{3})*|\d+)\s*(?:lbs?|pounds?|lb|tons?)\b/i);
   const freightType = detectFreightType(compact);
 
-  return { name, email, phone, company, freight_type: freightType, origin, destination, weight };
+  return {
+    name,
+    email: email && email.toLowerCase() !== "quotes@urfreight365.com" ? email : null,
+    phone,
+    company,
+    freight_type: freightType,
+    origin,
+    destination: laneDestination || destination,
+    weight,
+  };
 }
 
 async function upsertLead(conversationId, leadInfo) {
