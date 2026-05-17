@@ -24,6 +24,10 @@
 .teaser-row{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:10px 0 60px}.teaser-card{border:1px solid var(--line);border-radius:28px;padding:28px;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.035));box-shadow:var(--shadow);min-height:360px;display:flex;flex-direction:column;align-items:flex-start}.teaser-card h2{font-size:clamp(2rem,3.3vw,3.2rem);line-height:.96;letter-spacing:-.065em;margin:12px 0 12px}.teaser-card p,.teaser-card li{color:#d5deea}.teaser-card p{margin:0 0 18px}.teaser-card ul{margin:0 0 22px;padding-left:20px;display:grid;gap:8px}.teaser-card .carrier-cta{margin-top:auto}
     @media(max-width:900px){.gateway,.carrier-inner,.section-grid,.teaser-row{grid-template-columns:1fr}.choice{min-height:500px}.nav{align-items:flex-start}.phone{display:none}.hero{padding-top:52px}.carrier-inner,.section-grid{padding:30px}.lane-card{min-height:auto}}@media(max-width:560px){.brand{align-items:flex-start}.brand-copy strong{font-size:.92rem}.urf-logo{min-width:148px;height:52px;padding-inline:18px}.nav-actions{justify-content:flex-start}.nav-link{padding:8px 10px}.choice{min-height:470px}.content{padding:24px}.meta,.carrier-benefits,.lane-grid,.assurance-grid,.ready-grid{grid-template-columns:1fr}.step-card{grid-template-columns:1fr}.hero h1{font-size:clamp(3rem,15vw,4.4rem)}}
   /* Low-priority mobile polish */@media(max-width:640px){.hero{padding-top:42px;padding-bottom:28px}.hero h1{font-size:clamp(2.35rem,13vw,4rem)}.choice{min-height:360px}.nav{align-items:flex-start}.actions,.contact-row{gap:10px}.btn,.cta,button{min-height:44px}.hero-card{margin-top:18px}}
+
+/* Shared professional footer + Booking Logistics logo integration */
+.booking-logo-lockup{display:flex;align-items:center;gap:16px;margin:20px 0 0;padding:16px 18px;border:1px solid rgba(255,255,255,.18);border-radius:22px;background:rgba(255,255,255,.08);box-shadow:0 16px 40px rgba(0,0,0,.18)}.band-light .booking-logo-lockup{background:#fff;border-color:#dce4ee;box-shadow:0 14px 34px rgba(7,17,31,.12)}.booking-logo-lockup img{width:74px;height:74px;object-fit:contain;border-radius:16px;background:#fff;padding:8px;box-shadow:0 12px 28px rgba(0,0,0,.18);flex:0 0 auto}.booking-logo-lockup strong{display:block;color:var(--text,#fff);font-size:1.05rem;line-height:1.2}.band-light .booking-logo-lockup strong{color:#07111f}.booking-logo-lockup span{display:block;color:var(--muted,#a8bbcc);font-size:.92rem}.band-light .booking-logo-lockup span{color:#526173}.site-footer,.footer{position:relative;z-index:1;border-top:1px solid var(--line,rgba(255,255,255,.16));background:linear-gradient(180deg,rgba(7,10,18,.94),rgba(2,5,11,.98));color:#c6d1dd;padding:0;text-align:left}.site-footer__inner{width:min(1180px,calc(100% - 32px));margin:0 auto;display:grid;grid-template-columns:minmax(240px,1.25fr) minmax(260px,1fr) minmax(240px,.95fr);gap:28px;align-items:start;padding:34px 0}.site-footer__brand{display:grid;gap:16px}.site-footer__broker{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:rgba(255,255,255,.055)}.site-footer__broker img{width:58px;height:58px;object-fit:contain;border-radius:14px;background:#fff;padding:7px;flex:0 0 auto}.site-footer__eyebrow{display:block;color:var(--orange,var(--cyan2,#55e6ff));font-size:.72rem;font-weight:950;letter-spacing:.16em;text-transform:uppercase}.site-footer__title{display:block;color:#fff;font-weight:950;line-height:1.2}.site-footer__text{margin:8px 0 0;color:#aeb8c4;font-size:.92rem;line-height:1.55}.site-footer__heading{margin:0 0 12px;color:#fff;font-size:.82rem;font-weight:950;letter-spacing:.16em;text-transform:uppercase}.site-footer__links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px}.site-footer__links a,.site-footer__contact a{color:#f7fbff;text-decoration:none;font-weight:800}.site-footer__links a:hover,.site-footer__contact a:hover{color:var(--orange,var(--cyan2,#55e6ff))}.site-footer__contact{display:grid;gap:10px}.site-footer__contact p{margin:0;color:#aeb8c4}.site-footer__bottom{border-top:1px solid rgba(255,255,255,.1);padding:16px 0;color:#91a0af;font-size:.86rem}.site-footer__bottom-inner{width:min(1180px,calc(100% - 32px));margin:0 auto;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}.site-footer p,.footer p{margin:0}@media(max-width:860px){.site-footer__inner{grid-template-columns:1fr 1fr}.site-footer__contact{grid-column:1/-1}.booking-logo-lockup{align-items:flex-start}}@media(max-width:560px){.site-footer__inner{grid-template-columns:1fr;padding:28px 0}.site-footer__links{grid-template-columns:1fr}.site-footer__bottom-inner{display:grid}.booking-logo-lockup{display:grid}.booking-logo-lockup img{width:64px;height:64px}.site-footer__broker{align-items:flex-start}}
+
   </style>
 
   <meta name="ollama-model" content="llama3.2" />
@@ -92,7 +96,7 @@
           <li>Authority, insurance, and safety review</li>
           <li>Activation for URF365 load offers</li>
         </ul>
-        <a class="carrier-cta" href="./carriers.html">Start Carrier Setup</a>
+        <div class="booking-logo-lockup"><img src="./assets/images/booking-logistics-logo.jpeg" alt="Booking Logistics LLC logo" loading="lazy"><div><strong>Booking Logistics LLC</strong><span>Carrier setup portal partner | MC-1503468</span></div></div><a class="carrier-cta" href="./carriers.html">Start Carrier Setup</a>
       </article>
       <article class="teaser-card" id="shipper-setup">
         <div class="eyebrow">Shipper Setup</div>
@@ -107,7 +111,42 @@
     </section>
   <section class="wrap" style="padding:0 0 58px;text-align:center"><div class="choice" style="min-height:auto;display:block;padding:28px;background:rgba(255,255,255,.07)"><div class="eyebrow">Start Here</div><h2 style="margin:10px 0 12px">Need help choosing a freight desk?</h2><p style="max-width:760px;margin:0 auto 20px;color:#d5deea">Send the load details once and UR Freight 365 LLC will route the request to the right steel, produce, logistics, port, warehouse, or cross-border support path.</p><div class="actions" style="justify-content:center"><a class="cta" href="mailto:quotes@urfreight365.com?subject=UR%20Freight%20365%20Load%20Request">Email Load Details</a><a class="cta" href="tel:+13465222772">Call 346-522-2772</a></div></div></section>
   </main>
-  <footer class="footer">UR Freight 365 LLC · Houston, Texas · Steel, pipe, produce, cross-border, port, warehouse, and last-mile freight support · <a href="./privacy-policy.html">Privacy Policy</a> · <a href="./terms.html">Terms &amp; Conditions</a> · <a href="./unsubscribe.html">Unsubscribe</a></footer>
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <div>
+        <span class="site-footer__eyebrow">UR Freight 365 LLC</span>
+        <strong class="site-footer__title">Houston Freight Command</strong>
+        <p class="site-footer__text">Steel, pipe, produce, cross-border, port, warehouse, and last-mile freight support.</p>
+      </div>
+      <div class="site-footer__broker">
+        <img src="./assets/images/booking-logistics-logo.jpeg" alt="Booking Logistics LLC logo" loading="lazy">
+        <div><span class="site-footer__eyebrow">Broker Partner</span><strong class="site-footer__title">Booking Logistics LLC</strong><p class="site-footer__text">Freight support under MC-1503468.</p></div>
+      </div>
+    </div>
+    <nav class="site-footer__nav" aria-label="Footer navigation">
+      <h2 class="site-footer__heading">Site Links</h2>
+      <div class="site-footer__links">
+        <a href="./index.html">Home</a>
+        <a href="./services.html">Services</a>
+        <a href="./quote.html">Request a Quote</a>
+        <a href="./carriers.html">Carriers</a>
+        <a href="./shipper-setup.html">Shipper Setup</a>
+        <a href="./compliance.html">Compliance</a>
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./terms.html">Terms &amp; Conditions</a>
+        <a href="./unsubscribe.html">Unsubscribe</a>
+      </div>
+    </nav>
+    <div class="site-footer__contact">
+      <h2 class="site-footer__heading">Contact</h2>
+      <p>Houston, Texas</p>
+      <p><a href="tel:+13465222772">346-522-2772</a></p>
+      <p><a href="mailto:quotes@urfreight365.com">quotes@urfreight365.com</a></p>
+    </div>
+  </div>
+  <div class="site-footer__bottom"><div class="site-footer__bottom-inner"><span>© 2026 UR Freight 365 LLC. All rights reserved.</span><span>Licensed broker partner: Booking Logistics LLC | MC-1503468</span></div></div>
+</footer>
   <script src="./chat-widget.js" defer></script>
 </body>
 </html>
