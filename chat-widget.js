@@ -6,20 +6,17 @@
 
   const config = Object.assign(
     {
-      endpoint: "https://api.ollama.com/v1/chat/completions",
+      endpoint: "/api/freight-assistant",
       model: "llama3.2",
-      apiKey: "",
       temperature: 0.35,
       maxTokens: 420,
     },
     window.UR_FREIGHT_CHAT_CONFIG || {}
   );
 
-  const metaKey = document.querySelector('meta[name="ollama-api-key"]')?.content?.trim();
   const metaModel = document.querySelector('meta[name="ollama-model"]')?.content?.trim();
   const metaEndpoint = document.querySelector('meta[name="ollama-endpoint"]')?.content?.trim();
 
-  config.apiKey = config.apiKey || metaKey || "";
   config.model = metaModel || config.model;
   config.endpoint = metaEndpoint || config.endpoint;
 
@@ -49,35 +46,24 @@
   }
 
   async function askAssistant(question) {
-    if (!config.apiKey) {
-      return "The chat widget is installed, but OLLAMA_URF365 is not configured yet. Add it in Railway and inject process.env.OLLAMA_URF365 as window.UR_FREIGHT_CHAT_CONFIG.apiKey or the ollama-api-key meta tag.";
-    }
-
     const response = await fetch(config.endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
       },
       body: JSON.stringify({
         model: config.model,
-        temperature: config.temperature,
-        max_tokens: config.maxTokens,
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages.slice(-10),
-          { role: "user", content: question },
-        ],
+        messages: [...messages.slice(-10), { role: "user", content: question }],
       }),
     });
 
     if (!response.ok) {
       const detail = await response.text().catch(() => "");
-      throw new Error(`Ollama API request failed (${response.status}). ${detail}`.trim());
+      throw new Error(`Freight assistant request failed (${response.status}). ${detail}`.trim());
     }
 
     const data = await response.json();
-    return data?.choices?.[0]?.message?.content?.trim() || "I could not generate a response. Please call 346-522-2772 or email quotes@urfreight365.com.";
+    return data?.answer?.trim() || "I could not generate a response. Please call 346-522-2772 or email quotes@urfreight365.com.";
   }
 
   async function handleSubmit(event) {

@@ -1,6 +1,6 @@
 # UR Freight 365 Unified Site Deployment
 
-This folder is the deployment-ready static site for UR Freight 365 LLC.
+This folder is the deployment-ready UR Freight 365 LLC site with a small Node/Express server for the freight assistant chat widget.
 
 ## Folder to deploy
 
@@ -8,7 +8,7 @@ Deploy this folder as the project root:
 
 `ur-freight-365-unified/`
 
-There is no build step. The site is plain HTML, CSS, JavaScript, and images.
+There is no build step. Railway should run `npm install` and start the app with `npm start`. The Express server serves the HTML/CSS/JavaScript/images and proxies chat requests.
 
 ## What is included
 
@@ -21,6 +21,18 @@ There is no build step. The site is plain HTML, CSS, JavaScript, and images.
 - `unsubscribe.html` — shared unsubscribe page
 - `about.html`, `contact.html`, `quote.html`, `services.html` — shared supporting pages
 - `vercel.json` — clean URL and HTML cache-header configuration
+- `server.js` — Railway/Node server that reads `process.env.Ollama_URF365` for the chat widget API key
+- `.env.example` — documents required and optional environment variables
+
+## Railway environment variables
+
+Set these in Railway before redeploying:
+
+- `Ollama_URF365` — required API key for the Ollama/OpenAI-compatible freight assistant endpoint.
+- `OLLAMA_ENDPOINT` — optional override for the chat completions endpoint.
+- `OLLAMA_MODEL` — optional model override; defaults to `llama3.2`.
+
+Do not commit a real API key. The server reads `process.env.Ollama_URF365` and keeps the key out of browser JavaScript.
 
 ## Push to GitHub
 
