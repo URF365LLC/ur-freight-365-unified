@@ -13,7 +13,7 @@ function buildFreightFallbackAnswer(messages) {
   const text = lastUserMessage.toLowerCase();
   const contact = "For a confirmed quote, call 346-522-2772 or email quotes@urfreight365.com.";
 
-  if (/(rate|quote|price|cost|bid)/.test(text)) {
+  if (/\b(rate|quote|price|cost|bid)\b/.test(text)) {
     return `To build a freight rate, UR Freight 365 needs origin, destination, commodity, weight, dimensions or pallet count, equipment type, pickup date, delivery window, and any appointment or special handling details. ${contact}`;
   }
 
