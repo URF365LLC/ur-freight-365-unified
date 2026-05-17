@@ -98,7 +98,7 @@
     }
 
     const data = await response.json();
-    return data?.answer?.trim() || "I could not generate a response. Please call 346-522-2772 or email quotes@urfreight365.com.";
+    return data?.answer?.trim() || "I could not generate a response. Please call 346-522-2772 or email quote@urfreight365llc.com.";
   }
 
   async function handleSubmit(event) {
@@ -117,7 +117,7 @@
       renderMessage(answer, "bot");
     } catch (error) {
       console.error(error);
-      const fallback = "Sorry, the UR Freight 365 assistant is having trouble connecting right now. For immediate help, call 346-522-2772 or email quotes@urfreight365.com.";
+      const fallback = "Sorry, the UR Freight 365 assistant is having trouble connecting right now. For immediate help, call 346-522-2772 or email quote@urfreight365llc.com.";
       messages.push({ role: "assistant", content: fallback });
       renderMessage(fallback, "bot", true);
     } finally {
@@ -149,7 +149,7 @@
         <input class="urf-chat-input" type="text" autocomplete="off" placeholder="Ask about a lane or quote..." aria-label="Chat message" />
         <button class="urf-chat-send" type="submit">Send</button>
       </form>
-      <p class="urf-chat-disclaimer">For confirmed quotes or urgent freight, call <a href="tel:+13465222772">346-522-2772</a> or email quotes@urfreight365.com.</p>
+      <p class="urf-chat-disclaimer">For confirmed quotes or urgent freight, call <a href="tel:+13465222772">346-522-2772</a> or email quote@urfreight365llc.com.</p>
     </div>
     <button class="urf-chat-launcher" type="button" aria-label="Open UR Freight 365 chat">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.75 6.5A4.5 4.5 0 0 1 9.25 2h5.5a4.5 4.5 0 0 1 4.5 4.5v4.75a4.5 4.5 0 0 1-4.5 4.5h-2.7l-4.25 3.4a.85.85 0 0 1-1.38-.66v-2.74A4.5 4.5 0 0 1 4.75 11.25V6.5Z" stroke="currentColor" stroke-width="1.8"/><path d="M8.2 8h7.6M8.2 11.2h4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
