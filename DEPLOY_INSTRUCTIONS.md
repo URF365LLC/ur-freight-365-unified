@@ -21,18 +21,18 @@ There is no build step. Railway should run `npm install` and start the app with 
 - `unsubscribe.html` — shared unsubscribe page
 - `about.html`, `contact.html`, `quote.html`, `services.html` — shared supporting pages
 - `vercel.json` — clean URL and HTML cache-header configuration
-- `server.js` — Railway/Node server that reads `process.env.Ollama_URF365` for the chat widget API key
+- `server.js` — Railway/Node server that reads `process.env.Ollama_URF365` or `process.env.OLLAMA_API_KEY` for the chat widget API key
 - `.env.example` — documents required and optional environment variables
 
 ## Railway environment variables
 
 Set these in Railway before redeploying:
 
-- `Ollama_URF365` — required API key for the Ollama/OpenAI-compatible freight assistant endpoint.
+- `Ollama_URF365` or `OLLAMA_API_KEY` — optional API key for the Ollama/OpenAI-compatible freight assistant endpoint. If the upstream request fails, the server returns a built-in UR Freight 365 fallback answer instead of breaking the widget.
 - `OLLAMA_ENDPOINT` — optional override for the chat completions endpoint.
 - `OLLAMA_MODEL` — optional model override; defaults to `llama3.2`.
 
-Do not commit a real API key. The server reads `process.env.Ollama_URF365` and keeps the key out of browser JavaScript.
+Do not commit a real API key. The server reads `process.env.Ollama_URF365` or `process.env.OLLAMA_API_KEY` and keeps the key out of browser JavaScript.
 
 ## Push to GitHub
 

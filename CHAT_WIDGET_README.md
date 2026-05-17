@@ -16,15 +16,15 @@ Do not hardcode the API key in the repository. Add it to Railway instead:
 1. Open the UR Freight 365 Railway project.
 2. Select the deployed service.
 3. Open the `Variables` tab.
-4. Add a variable named `Ollama_URF365`.
+4. Add a variable named `Ollama_URF365` or `OLLAMA_API_KEY`.
 5. Paste the Ollama Cloud or OpenAI-compatible API key as the value.
 6. Redeploy the service.
 
-The server reads `process.env.Ollama_URF365` inside `server.js` and uses it as the bearer token for the freight assistant API request. The key is never sent to the browser.
+The server reads `process.env.Ollama_URF365` first, then `process.env.OLLAMA_API_KEY`, inside `server.js` and uses it as the bearer token for the freight assistant API request. The key is never sent to the browser.
 
 Optional server configuration:
 
-- `OLLAMA_ENDPOINT` — defaults to `https://api.ollama.com/v1/chat/completions`.
+- `OLLAMA_ENDPOINT` — defaults to `https://ollama.com/v1/chat/completions`.
 - `OLLAMA_MODEL` — defaults to `llama3.2`.
 
 ## Local development
@@ -41,7 +41,7 @@ Then open `http://localhost:3000`.
 
 ## Widget API flow
 
-The browser widget posts chat history to `/api/freight-assistant`. The Express server validates the message, adds the UR Freight 365 system prompt, and forwards the request to the configured Ollama/OpenAI-compatible endpoint using `process.env.Ollama_URF365`.
+The browser widget posts chat history to `/api/freight-assistant`. The Express server validates the message, adds the UR Freight 365 system prompt, and forwards the request to the configured Ollama/OpenAI-compatible endpoint using `process.env.Ollama_URF365` or `process.env.OLLAMA_API_KEY`.
 
 ## Model configuration
 
