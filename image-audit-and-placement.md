@@ -1,200 +1,92 @@
-# UR Freight 365 Editorial Image Audit and Placement Summary
+# UR Freight 365 Cohesive Image Placement Summary
 
-Updated after a professional editorial pass through all client image folders, with special review of `Z-Random Upload-Client Pictures`.
+This update corrects the “random image” problem by using consistent visual families per page instead of mixing unrelated client photos just to maximize variety.
 
-## Editorial Criteria
+## Cohesion Rules
 
-Images were judged on composition, angle, lighting, subject clarity, operational credibility, emotional impact, and whether a shipper would think: “these people know what they are doing.”
+- Homepage: three gateway visuals now read as a campaign: steel pipe, produce, and Mexico/cross-border operations.
+- Services: cards stay category-matched by freight type.
+- Steel: pipe/tubing/metal-handling visuals only.
+- Produce: reefer interiors, produce loads, and cold-chain visuals only.
+- Logistics: crane, lowboy, cross-border, dock, and operations visuals only.
+- Filename uniqueness is preserved across the site.
 
-## Placement Rules Applied
+## Page-Level Visual Families
 
-- Every client-photo filename used by the site is unique across all HTML and CSS.
-- Produce pages use produce/reefer/cold-chain images.
-- Steel pages use pipe, tubing, metal sheets, flatbeds, and crane/steel handling images.
-- Logistics pages prioritize US-to-Mexico, crane, dock, warehouse, and cross-border operations.
-- No stock photo URLs are used.
+- Home: US-to-Mexico crane hero, pipe, produce, cross-border, dock, operations.
+- Services: Overview uses a broad but ordered set: produce cards use produce, steel cards use steel/pipe, cross-border cards use Mexico/operations, port/warehouse/final-mile use dock/operations..
+- Steel: Steel page stays in pipe/tubing/metal handling family only..
+- Produce: Produce page stays in reefer/produce/cold-chain family only..
+- Logistics: Logistics page stays in cross-border, crane, lowboy, dock, and operations family only..
 
-## Featured Editorial Picks and Rationale
+## Current Placements
 
-- `z-griffin-dock-flatbed.jpeg` → `about.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `triple-s-edmonton-flatbeds.jpeg` → `about.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-griffin-flatbed-truck-side.jpeg` → `about.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-load-2.jpeg` → `carriers.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-metal-sheets-shop.jpeg` → `compliance.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-empty-flatbed-tractor-yard.jpeg` → `contact.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-load-5.jpeg` → `contact.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-griffin-empty-trailer-yard.jpeg` → `contact.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `editorial-crane-us-mx-hero.jpeg` → `index.html` — Homepage hero candidate: crane, trucks, mountains, and jobsite scale create the strongest operational proof and cross-border credibility.
-- `editorial-pipe-stack-hero.jpg` → `index.html` — Homepage steel gateway: clean side angle on stacked pipe, strong depth, instantly readable commodity.
-- `editorial-produce-peppers.jpeg` → `index.html` — Homepage produce gateway: vivid peppers in crates deliver color, freshness, and unmistakable produce context.
-- `editorial-metal-arched-us-mx.jpeg` → `index.html` — Homepage logistics gateway: arched metal load is distinctive, clean, and tied to cross-border industrial work.
-- `editorial-open-deck-sky.jpeg` → `index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-griffin-forklift-flatbed.jpeg` → `index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `editorial-crane-us-mx-logistics.jpeg` → `logistics/index.html` — Logistics hero: shows active crane coordination on a US-to-Mexico move, communicating capability beyond basic brokerage.
-- `editorial-lowboy-us-mx.jpeg` → `logistics/index.html` — Cross-border card: lowboy/oversized industrial load reinforces Mexico-lane capability.
-- `editorial-metal-arched-logistics.jpeg` → `logistics/index.html` — Logistics card: unique arched metal cargo creates a memorable international freight visual.
-- `editorial-flatbed-dock-wide.jpeg` → `logistics/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `triple-s-flatbed-day-2.jpg` → `logistics/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-load-7.jpeg` → `logistics/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-flatbed-dock-load-alt.jpeg` → `logistics/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-load-3.jpeg` → `privacy-policy.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-empty-reefer-trailer.jpeg` → `privacy-policy.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `editorial-produce-peppers-hero.jpeg` → `produce/index.html` — Produce page hero: bright produce texture creates immediate cold-chain relevance and visual contrast.
-- `editorial-produce-reefer-clean.jpeg` → `produce/index.html` — Produce hero card: clean reefer interior with stacked crates signals food-safe, shipper-ready handling.
-- `editorial-reefer-boxed-load.jpeg` → `produce/index.html` — Produce support card: orderly boxed reefer load shows dock discipline and load security.
-- `z-produce-crates-top.jpeg` → `produce/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `frontera-produce-pallets-3.jpeg` → `produce/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `frontera-produce-pallets-4.jpeg` → `produce/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `frontera-produce-pallets-2.jpeg` → `produce/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-reefer-packed-load.jpeg` → `produce/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-crossborder-crates-flatbed.jpeg` → `quote.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-reefer-palletized-produce.jpeg` → `quote.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-metal-pipe-crossborder-deck.jpeg` → `quote.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `editorial-open-deck-services.jpeg` → `services.html` — Services overview hero: wide open-deck truck profile reads American, practical, and service-ready.
-- `editorial-flatbed-dock-services.jpeg` → `services.html` — Services operations card: dock-side flatbed scene shows real loading context and shipper facility work.
-- `frontera-watermelons.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `frontera-produce-pallets-1.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `frontera-produce-boxes.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `frontera-produce-pallets-5.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-yard.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `griffin-steel-flatbed.jpg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `tube-supply-pipe-load-2.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `humberto-us-mx-industrial-load.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `triple-s-flatbed-day-1.jpg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `special-metals-steel-flatbed.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `tube-supply-hotshot.jpeg` → `services.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-shipper-boxed-load.jpeg` → `shipper-setup.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `editorial-pipe-stack-steel-hero.jpg` → `steel/index.html` — Steel page hero: pipe fills the frame with industrial scale and clear steel-service relevance.
-- `editorial-green-pipe-crane.jpeg` → `steel/index.html` — Steel feature: crane over green pipe adds action, depth, and heavy-freight competence.
-- `griffin-empty-flatbed-yard.jpeg` → `steel/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `editorial-green-pipe-perspective.jpeg` → `steel/index.html` — Steel service card: strong leading lines across pipe bundles give visual energy and subject clarity.
-- `editorial-steel-pipe-deck.jpeg` → `steel/index.html` — Steel service card: top-down deck view clearly shows mixed pipe/tubing freight and securement planning.
-- `tube-supply-pipe-detail-1.jpeg` → `steel/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `griffin-industrial-load.jpeg` → `steel/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-pipe-single-pallet.jpeg` → `steel/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-load-8.jpeg` → `steel/index.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-load-4.jpeg` → `terms.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-tarped-load-closeup.jpeg` → `terms.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `warrior-flatbed-load-6.jpeg` → `unsubscribe.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-empty-reefer-clean.jpeg` → `unsubscribe.html` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `editorial-crane-us-mx-carrier.jpeg` → `styles.css` — Carrier/operations background: dramatic equipment and real jobsite activity add commercial weight.
-- `editorial-lowboy-shipper.jpeg` → `styles.css` — Shipper setup background: oversized load visual supports heavy freight onboarding credibility.
-- `editorial-open-deck-cta.jpeg` → `styles.css` — CTA background: dramatic sky and open-deck profile add momentum without distracting from copy.
-- `triple-s-night-flatbed-1.jpeg` → `styles.css` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `triple-s-night-flatbed-2.jpeg` → `styles.css` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-flatbed-empty-deck-alt.jpeg` → `styles.css` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-crane-tarped-load-close.jpeg` → `styles.css` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-- `z-industrial-road-mirror.jpeg` → `styles.css` — Selected as a real client operation photo that fits the page context while preserving site-wide uniqueness.
-
-## Strongest Image Categories
-
-- PRODUCE: peppers in black crates, boxed reefer loads, clean reefer interiors, potatoes, watermelon, and palletized Frontera loads.
-- STEEL: green pipe crane shots, pipe stack side angles, metal sheet shop images, tubing on deck, and Griffin/Tubes Supply flatbed loads.
-- LOGISTICS / OPERATIONS: US-to-Mexico crane operation, lowboy Mexico loads, forklift loading, dock flatbeds, warehouse/dock truck scenes.
-- GENERAL / HERO: crane US-to-Mexico operation, pipe stack hero, arched metal load, open-deck sky shot, and clean American flatbed profiles.
-
-## Full Downloads/Website Catalog
-
-- `Frontera Produce/1746545980179.jpeg` — PRODUCE
-- `Frontera Produce/1746545980193.jpeg` — PRODUCE
-- `Frontera Produce/1746545980217.jpeg` — PRODUCE
-- `Frontera Produce/1751904496147.jpeg` — PRODUCE
-- `Frontera Produce/1751904497087.jpeg` — PRODUCE
-- `Frontera Produce/1751904497159.jpeg` — PRODUCE
-- `Griffin Trade Group/3668c3d15e704ce5a5ba6956799f3e21.jpeg` — STEEL
-- `Griffin Trade Group/5a430b4fdb23467c9b1f2a91d1d248cd.jpeg` — STEEL
-- `Griffin Trade Group/839b4d05e4064166b14be509f9357cb6.jpg` — STEEL
-- `Griffin Trade Group/WhatsApp Image 2026-05-15 at 08.42.07.jpeg` — STEEL
-- `Humberto(US to MX)/loadpic1.jpeg` — LOGISTICS / OPERATIONS
-- `Special Metals/WhatsApp Image 2026-05-13 at 16.51.39.jpeg` — STEEL
-- `TRIPLE S_EDMONTON/1000001867.jpg` — GENERAL / HERO
-- `TRIPLE S_EDMONTON/1000001870.jpg` — GENERAL / HERO
-- `TRIPLE S_EDMONTON/1771691866074.jpeg` — GENERAL / HERO
-- `TRIPLE S_EDMONTON/1771691867620.jpeg` — GENERAL / HERO
-- `TRIPLE S_EDMONTON/1771691868407.jpeg` — GENERAL / HERO
-- `TRIPLE S_EDMONTON/23eab31c-d1c4-4352-9635-0413edcc54b1.png` — GENERAL / HERO
-- `TRIPLE S_EDMONTON/714a0d9a-5d82-495a-be04-eeabd897a40d.png` — GENERAL / HERO
-- `TRIPLE S_EDMONTON/image (18).png` — GENERAL / HERO
-- `Tube Supply (HTX)/1751904495987.jpeg` — STEEL
-- `Tube Supply (HTX)/1751904496950.jpeg` — STEEL
-- `Tube Supply (HTX)/1751904497037.jpeg` — STEEL
-- `Tube Supply (HTX)/1751904497176 (Hotshot).jpeg` — STEEL
-- `Tube Supply (HTX)/d1358b87b5584debbd92ffeb9da2b240.jpeg` — STEEL
-- `Tube Supply (HTX)/d4883b936fcf4f39aa14c9ecf2c5e534.jpeg` — STEEL
-- `Tube Supply (HTX)/e85f019666a740cf959f8ac9865d8ce8.jpeg` — STEEL
-- `Warrior Trucking/1750860674553.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1750860674610.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1750860674672.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1750860674702.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1750860674756.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1750860674800.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1750860674872.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1750860676956.jpeg` — GENERAL / HERO
-- `Warrior Trucking/1751904497610.jpeg` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/#1_40ft_HotShot_US_ONLY.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/#1_Facility Pic.JPG` — LOGISTICS / OPERATIONS
-- `Z-Random Upload-Client Pictures/#1_LowBoy_US to MX.JPG` — LOGISTICS / OPERATIONS
-- `Z-Random Upload-Client Pictures/#1_OpenDeck_US_ONLY.jpg` — STEEL
-- `Z-Random Upload-Client Pictures/#1_Reefer_US_ONLY.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/#1_Trucks Images.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/#1_US to MX.JPG` — LOGISTICS / OPERATIONS
-- `Z-Random Upload-Client Pictures/#2_OpenDeck_US_ONLY.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/#2_Reefer_US_ONLY.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/#2_US to MX.JPG` — LOGISTICS / OPERATIONS
-- `Z-Random Upload-Client Pictures/#3_OpenDeck_US_ONLY.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/#3_Reefer_US_ONLY.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/#3_Us to MX.JPG` — LOGISTICS / OPERATIONS
-- `Z-Random Upload-Client Pictures/#4_OpenDeck_US_ONLY.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/#4_Reefer_US_ONLY.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/#5_OpenDeck_US_ONLY.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/#6_OpenDeck_US_ONLY.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_3712.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_3713.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_3718.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_3809.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4147.jpg` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4358.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4432.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4433.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4434.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4461.jpg` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_4538.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4550.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4838.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4839.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_4840.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_4842.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_4843.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_4844.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_4845.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_4867.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_5144.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_5145.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_5146.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_5147.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_5148.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_5149.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_5150.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_5240.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_5335.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_5437.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/IMG_5561.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_5989.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_6179.JPG` — STEEL
-- `Z-Random Upload-Client Pictures/IMG_6539.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_6540.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/IMG_6542.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_7865 2.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_7866.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_8014.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_8018.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_8198.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/IMG_8199.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/IMG_8912.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_8945.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_8947.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_8948 2.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/IMG_8948.JPG` — PRODUCE
-- `Z-Random Upload-Client Pictures/IMG_8950.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/IMG_8951.JPG` — GENERAL / HERO
-- `Z-Random Upload-Client Pictures/Reefer#1_US.JPG` — PRODUCE
+- `z-griffin-dock-flatbed.jpeg` → `about.html`
+- `triple-s-edmonton-flatbeds.jpeg` → `about.html`
+- `z-griffin-flatbed-truck-side.jpeg` → `about.html`
+- `warrior-flatbed-load-2.jpeg` → `carriers.html`
+- `z-metal-sheets-shop.jpeg` → `compliance.html`
+- `z-empty-flatbed-tractor-yard.jpeg` → `contact.html`
+- `warrior-flatbed-load-5.jpeg` → `contact.html`
+- `z-griffin-empty-trailer-yard.jpeg` → `contact.html`
+- `editorial-crane-us-mx-hero.jpeg` → `index.html`
+- `editorial-pipe-stack-hero.jpg` → `index.html`
+- `editorial-produce-peppers.jpeg` → `index.html`
+- `editorial-crane-us-mx-logistics.jpeg` → `index.html`
+- `editorial-flatbed-dock-wide.jpeg` → `index.html`
+- `z-griffin-forklift-flatbed.jpeg` → `index.html`
+- `cohesive-crane-logistics-hero.jpeg` → `logistics/index.html`
+- `editorial-lowboy-us-mx.jpeg` → `logistics/index.html`
+- `editorial-metal-arched-logistics.jpeg` → `logistics/index.html`
+- `z-crossborder-tarped-machine.jpeg` → `logistics/index.html`
+- `cohesive-flatbed-logistics-card.jpeg` → `logistics/index.html`
+- `z-crane-tarped-load-close.jpeg` → `logistics/index.html`
+- `editorial-flatbed-dock-services.jpeg` → `logistics/index.html`
+- `warrior-flatbed-load-3.jpeg` → `privacy-policy.html`
+- `z-empty-reefer-trailer.jpeg` → `privacy-policy.html`
+- `editorial-produce-peppers-hero.jpeg` → `produce/index.html`
+- `editorial-produce-reefer-clean.jpeg` → `produce/index.html`
+- `editorial-reefer-boxed-load.jpeg` → `produce/index.html`
+- `z-produce-crates-top.jpeg` → `produce/index.html`
+- `frontera-produce-pallets-3.jpeg` → `produce/index.html`
+- `z-produce-black-crates.jpeg` → `produce/index.html`
+- `frontera-produce-pallets-2.jpeg` → `produce/index.html`
+- `z-reefer-packed-load.jpeg` → `produce/index.html`
+- `z-crossborder-crates-flatbed.jpeg` → `quote.html`
+- `z-reefer-palletized-produce.jpeg` → `quote.html`
+- `z-flatbed-metal-sheets-day.jpeg` → `quote.html`
+- `editorial-open-deck-services.jpeg` → `services.html`
+- `z-warehouse-trucks-dock.jpeg` → `services.html`
+- `frontera-watermelons.jpeg` → `services.html`
+- `frontera-produce-pallets-1.jpeg` → `services.html`
+- `frontera-produce-boxes.jpeg` → `services.html`
+- `frontera-produce-pallets-5.jpeg` → `services.html`
+- `editorial-open-deck-sky.jpeg` → `services.html`
+- `griffin-steel-flatbed.jpg` → `services.html`
+- `tube-supply-pipe-load-2.jpeg` → `services.html`
+- `humberto-us-mx-industrial-load.jpeg` → `services.html`
+- `triple-s-flatbed-day-1.jpg` → `services.html`
+- `special-metals-steel-flatbed.jpeg` → `services.html`
+- `z-flatbed-dock-load-alt.jpeg` → `services.html`
+- `z-warehouse-pallet-load.jpeg` → `shipper-setup.html`
+- `editorial-pipe-stack-steel-hero.jpg` → `steel/index.html`
+- `editorial-green-pipe-crane.jpeg` → `steel/index.html`
+- `editorial-steel-pipe-deck.jpeg` → `steel/index.html`
+- `editorial-green-pipe-perspective.jpeg` → `steel/index.html`
+- `z-metal-pipe-crossborder-deck.jpeg` → `steel/index.html`
+- `z-pipe-single-pallet.jpeg` → `steel/index.html`
+- `z-pipe-forklift-loading.jpeg` → `steel/index.html`
+- `cohesive-pipe-single-card.jpeg` → `steel/index.html`
+- `griffin-empty-flatbed-yard.jpeg` → `steel/index.html`
+- `warrior-flatbed-load-4.jpeg` → `terms.html`
+- `z-tarped-load-closeup.jpeg` → `terms.html`
+- `warrior-flatbed-load-6.jpeg` → `unsubscribe.html`
+- `z-empty-reefer-clean.jpeg` → `unsubscribe.html`
+- `z-flatbed-fuel-stop-load.jpeg` → `styles.css`
+- `z-shipper-boxed-load.jpeg` → `styles.css`
+- `z-industrial-road-mirror.jpeg` → `styles.css`
+- `triple-s-night-flatbed-1.jpeg` → `styles.css`
+- `triple-s-night-flatbed-2.jpeg` → `styles.css`
+- `z-flatbed-empty-deck-alt.jpeg` → `styles.css`
+- `z-empty-flatbed-rear.jpeg` → `styles.css`
+- `editorial-lowboy-shipper.jpeg` → `styles.css`
