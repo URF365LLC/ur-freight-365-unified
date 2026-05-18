@@ -85,7 +85,6 @@
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: config.model,
         session_id: sessionId,
         page_url: window.location.href,
         messages: [...messages.slice(-10), { role: "user", content: question }],

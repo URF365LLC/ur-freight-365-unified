@@ -318,7 +318,7 @@ app.post("/api/freight-assistant", async (request, response) => {
             Authorization: `Bearer ${apiKey}`,
           },
           body: JSON.stringify({
-            model: request.body?.model || ollamaModel,
+            model: ollamaModel,
             temperature: 0.35,
             max_tokens: 420,
             messages: [{ role: "system", content: systemPrompt }, ...recentMessages],
