@@ -307,9 +307,12 @@ app.post("/api/freight-assistant", async (request, response) => {
     let source = "ollama";
 
     if (apiKey) {
+      const abort = new AbortController();
+      const ollamaTimeout = setTimeout(() => abort.abort(), 15000);
       try {
         const ollamaResponse = await fetch(ollamaEndpoint, {
           method: "POST",
+          signal: abort.signal,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${apiKey}`,
@@ -330,7 +333,10 @@ app.post("/api/freight-assistant", async (request, response) => {
           console.error("Ollama API request failed", { status: ollamaResponse.status, endpoint: ollamaEndpoint, detail });
         }
       } catch (error) {
-        console.error("Ollama request failed", { endpoint: ollamaEndpoint, detail: error.message });
+        const reason = error.name === "AbortError" ? "timeout (15 s)" : error.message;
+        console.error("Ollama request failed", { endpoint: ollamaEndpoint, detail: reason });
+      } finally {
+        clearTimeout(ollamaTimeout);
       }
     }
 
@@ -400,6 +406,10 @@ app.get("/api/conversations", async (request, response) => {
     console.error("Failed to fetch conversations", { detail: error.message });
     return response.status(500).json({ error: "Failed to fetch conversations." });
   }
+});
+
+app.get("/api/health", (_request, response) => {
+  response.json({ ok: true, db: Boolean(pool), model: ollamaModel });
 });
 
 app.use(express.static(__dirname, { extensions: ["html"] }));
