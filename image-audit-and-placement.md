@@ -21,6 +21,8 @@ This update corrects the “random image” problem by using consistent visual f
 
 ## Current Placements
 
+- `lowboy-us-mx-heavy-haul-card.jpeg` → `steel/index.html` Steel, Pipe & Lowboy Support card — chosen because it is the clearest real lowboy/RGN-style heavy-haul image: oversized white industrial components are visibly secured on a low deck, so the card now matches the lowboy promise instead of showing a generic pipe pallet.
+
 - `z-griffin-dock-flatbed.jpeg` → `about.html`
 - `triple-s-edmonton-flatbeds.jpeg` → `about.html`
 - `z-griffin-flatbed-truck-side.jpeg` → `about.html`
