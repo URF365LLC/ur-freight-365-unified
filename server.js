@@ -9,6 +9,12 @@ const port = process.env.PORT || 3000;
 const ollamaEndpoint = process.env.OLLAMA_ENDPOINT || "https://ollama.com/v1/chat/completions";
 const ollamaModel = process.env.OLLAMA_MODEL || "llama3.2";
 const databaseUrl = process.env.DATABASE_URL;
+const hubspotAccessToken = process.env.HUBSPOT_ACCESS_TOKEN || process.env.HUBSPOT_PRIVATE_APP_TOKEN;
+const hubspotPipelineId = process.env.HUBSPOT_DEAL_PIPELINE_ID || process.env.HUBSPOT_PIPELINE_ID || "default";
+const hubspotNewLeadStageId = process.env.HUBSPOT_NEW_LEAD_STAGE_ID || process.env.HUBSPOT_DEAL_STAGE_ID || "appointmentscheduled";
+const hubspotOwnerId = process.env.HUBSPOT_OWNER_ID || "90683018";
+
+app.disable("x-powered-by");
 
 const pool = databaseUrl
   ? new Pool({
@@ -61,9 +67,40 @@ async function runMigrations() {
       captured_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
 
+    CREATE TABLE IF NOT EXISTS quote_requests (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      company TEXT NOT NULL,
+      phone TEXT,
+      email TEXT,
+      freight_type TEXT NOT NULL,
+      commodity TEXT NOT NULL,
+      weight_dimensions TEXT NOT NULL,
+      pickup_details TEXT NOT NULL,
+      delivery_details TEXT NOT NULL,
+      pickup_date_start TEXT NOT NULL,
+      pickup_date_end TEXT,
+      delivery_date_start TEXT,
+      delivery_date_end TEXT,
+      equipment_needs TEXT NOT NULL,
+      temperature_details TEXT,
+      drop_and_hook TEXT,
+      drop_and_trade TEXT,
+      special_instructions TEXT,
+      page_url TEXT,
+      referrer TEXT,
+      utm_source TEXT,
+      utm_medium TEXT,
+      utm_campaign TEXT,
+      ga_client_id TEXT,
+      customer_ip TEXT,
+      submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
     CREATE INDEX IF NOT EXISTS idx_messages_conversation_created_at ON messages(conversation_id, created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_conversations_updated_at ON conversations(updated_at DESC);
     CREATE INDEX IF NOT EXISTS idx_leads_captured_at ON leads(captured_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_quote_requests_submitted_at ON quote_requests(submitted_at DESC);
   `);
 
   console.log("Database migrations complete.");
@@ -79,10 +116,257 @@ function sanitizePageUrl(value) {
   return value.trim().slice(0, 1000) || null;
 }
 
+function requireLeadsApiKey(request, response, next) {
+  const configuredKey = process.env.LEADS_API_KEY;
+
+  if (!configuredKey) {
+    return response.status(503).json({ error: "Lead API access is not configured." });
+  }
+
+  const header = request.get("authorization") || "";
+  const [scheme, token] = header.split(" ");
+
+  if (scheme !== "Bearer" || token !== configuredKey) {
+    return response.status(401).json({ error: "Unauthorized." });
+  }
+
+  return next();
+}
+
 function getCustomerIp(request) {
   const forwarded = request.headers["x-forwarded-for"];
   if (typeof forwarded === "string" && forwarded.trim()) return forwarded.split(",")[0].trim();
   return request.ip || request.socket?.remoteAddress || null;
+}
+
+function sanitizeText(value, maxLength = 1000) {
+  if (typeof value !== "string") return "";
+  return value.trim().replace(/\s+/g, " ").slice(0, maxLength);
+}
+
+function sanitizeOptionalText(value, maxLength = 1000) {
+  const text = sanitizeText(value, maxLength);
+  return text || null;
+}
+
+function splitName(name) {
+  const parts = sanitizeText(name, 160).split(" ").filter(Boolean);
+  if (!parts.length) return {};
+  if (parts.length === 1) return { firstname: parts[0] };
+  return { firstname: parts.slice(0, -1).join(" "), lastname: parts[parts.length - 1] };
+}
+
+function stripEmptyProperties(properties) {
+  return Object.fromEntries(Object.entries(properties).filter(([, value]) => value !== undefined && value !== null && value !== ""));
+}
+
+async function hubspotRequest(pathname, options = {}) {
+  if (!hubspotAccessToken) return null;
+
+  const response = await fetch(`https://api.hubapi.com${pathname}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${hubspotAccessToken}`,
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : null;
+
+  if (!response.ok) {
+    const message = data?.message || text || `HubSpot API returned ${response.status}`;
+    throw new Error(message);
+  }
+
+  return data;
+}
+
+async function createHubspotContact(quote) {
+  if (!quote.email && !quote.phone) return null;
+  const nameParts = splitName(quote.name);
+  const properties = stripEmptyProperties({
+    ...nameParts,
+    email: quote.email,
+    phone: quote.phone,
+    company: quote.company,
+  });
+
+  try {
+    return await hubspotRequest("/crm/v3/objects/contacts", {
+      method: "POST",
+      body: JSON.stringify({ properties }),
+    });
+  } catch (error) {
+    if (!quote.email || !/already exists|conflict/i.test(error.message)) throw error;
+
+    const search = await hubspotRequest("/crm/v3/objects/contacts/search", {
+      method: "POST",
+      body: JSON.stringify({
+        filterGroups: [{ filters: [{ propertyName: "email", operator: "EQ", value: quote.email }] }],
+        properties: ["email", "firstname", "lastname", "phone", "company"],
+        limit: 1,
+      }),
+    });
+
+    return search?.results?.[0] || null;
+  }
+}
+
+async function createHubspotCompany(quote) {
+  if (!quote.company) return null;
+  const properties = stripEmptyProperties({ name: quote.company });
+
+  try {
+    return await hubspotRequest("/crm/v3/objects/companies", {
+      method: "POST",
+      body: JSON.stringify({ properties }),
+    });
+  } catch (error) {
+    if (!/already exists|conflict/i.test(error.message)) throw error;
+
+    const search = await hubspotRequest("/crm/v3/objects/companies/search", {
+      method: "POST",
+      body: JSON.stringify({
+        filterGroups: [{ filters: [{ propertyName: "name", operator: "EQ", value: quote.company }] }],
+        properties: ["name"],
+        limit: 1,
+      }),
+    });
+
+    return search?.results?.[0] || null;
+  }
+}
+
+function buildDealDescription(quote) {
+  return [
+    `Freight type: ${quote.freightType}`,
+    `Commodity: ${quote.commodity}`,
+    `Weight/dimensions: ${quote.weightDimensions}`,
+    `Pickup: ${quote.pickupDetails}`,
+    `Delivery: ${quote.deliveryDetails}`,
+    `Pickup date: ${quote.pickupDateStart}${quote.pickupDateEnd ? ` - ${quote.pickupDateEnd}` : ""}`,
+    quote.deliveryDateStart && `Delivery date: ${quote.deliveryDateStart}${quote.deliveryDateEnd ? ` - ${quote.deliveryDateEnd}` : ""}`,
+    `Equipment: ${quote.equipmentNeeds}`,
+    quote.temperatureDetails && `Temperature: ${quote.temperatureDetails}`,
+    quote.specialInstructions && `Special instructions: ${quote.specialInstructions}`,
+    quote.utmSource && `UTM source: ${quote.utmSource}`,
+    quote.utmCampaign && `UTM campaign: ${quote.utmCampaign}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+async function createHubspotDealAndTask(quote, contact, company) {
+  const associations = [];
+  if (contact?.id) {
+    associations.push({
+      to: { id: String(contact.id) },
+      types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 3 }],
+    });
+  }
+  if (company?.id) {
+    associations.push({
+      to: { id: String(company.id) },
+      types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 5 }],
+    });
+  }
+
+  const deal = await hubspotRequest("/crm/v3/objects/deals", {
+    method: "POST",
+    body: JSON.stringify({
+      properties: stripEmptyProperties({
+        dealname: `${quote.company || quote.name} - ${quote.freightType} quote`,
+        pipeline: hubspotPipelineId,
+        dealstage: hubspotNewLeadStageId,
+        description: buildDealDescription(quote),
+        hubspot_owner_id: hubspotOwnerId,
+      }),
+      associations,
+    }),
+  });
+
+  const dueAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+  const taskAssociations = [];
+  if (deal?.id) {
+    taskAssociations.push({
+      to: { id: String(deal.id) },
+      types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 216 }],
+    });
+  }
+
+  await hubspotRequest("/crm/v3/objects/tasks", {
+    method: "POST",
+    body: JSON.stringify({
+      properties: stripEmptyProperties({
+        hs_timestamp: dueAt,
+        hs_task_subject: `Follow up on ${quote.company || quote.name} freight quote`,
+        hs_task_body: buildDealDescription(quote),
+        hs_task_status: "NOT_STARTED",
+        hs_task_priority: "HIGH",
+        hs_task_type: "CALL",
+        hubspot_owner_id: hubspotOwnerId,
+      }),
+      associations: taskAssociations,
+    }),
+  });
+
+  return deal;
+}
+
+async function syncQuoteToHubspot(quote) {
+  if (!hubspotAccessToken) return { skipped: true, reason: "HUBSPOT_ACCESS_TOKEN is not configured." };
+
+  const contact = await createHubspotContact(quote);
+  const company = await createHubspotCompany(quote);
+  const deal = await createHubspotDealAndTask(quote, contact, company);
+
+  return { skipped: false, contactId: contact?.id || null, companyId: company?.id || null, dealId: deal?.id || null };
+}
+
+function normalizeQuotePayload(body = {}) {
+  return {
+    name: sanitizeText(body.name, 160),
+    company: sanitizeText(body.company, 180),
+    phone: sanitizeOptionalText(body.phone, 80),
+    email: sanitizeOptionalText(body.email, 180),
+    freightType: sanitizeText(body.freight_type || body.freightType, 160),
+    commodity: sanitizeText(body.commodity, 500),
+    weightDimensions: sanitizeText(body.weight_dimensions || body.weightDimensions, 1000),
+    pickupDetails: sanitizeText(body.pickup_details || body.pickupDetails, 1200),
+    deliveryDetails: sanitizeText(body.delivery_details || body.deliveryDetails, 1200),
+    pickupDateStart: sanitizeText(body.pickup_date_start || body.pickupDateStart, 80),
+    pickupDateEnd: sanitizeOptionalText(body.pickup_date_end || body.pickupDateEnd, 80),
+    deliveryDateStart: sanitizeOptionalText(body.delivery_date_start || body.deliveryDateStart, 80),
+    deliveryDateEnd: sanitizeOptionalText(body.delivery_date_end || body.deliveryDateEnd, 80),
+    equipmentNeeds: sanitizeText(body.equipment_needs || body.equipmentNeeds, 160),
+    temperatureDetails: sanitizeOptionalText(body.temperature_details || body.temperatureDetails, 500),
+    dropAndHook: sanitizeOptionalText(body.drop_and_hook || body.dropAndHook, 160),
+    dropAndTrade: sanitizeOptionalText(body.drop_and_trade || body.dropAndTrade, 160),
+    specialInstructions: sanitizeOptionalText(body.special_instructions || body.specialInstructions, 1600),
+    pageUrl: sanitizeOptionalText(body.page_url || body.pageUrl, 1000),
+    referrer: sanitizeOptionalText(body.referrer, 1000),
+    utmSource: sanitizeOptionalText(body.utm_source || body.utmSource, 200),
+    utmMedium: sanitizeOptionalText(body.utm_medium || body.utmMedium, 200),
+    utmCampaign: sanitizeOptionalText(body.utm_campaign || body.utmCampaign, 200),
+    gaClientId: sanitizeOptionalText(body.ga_client_id || body.gaClientId, 200),
+  };
+}
+
+function validateQuotePayload(quote) {
+  const missing = [];
+  if (!quote.name) missing.push("name");
+  if (!quote.company) missing.push("company");
+  if (!quote.email && !quote.phone) missing.push("email_or_phone");
+  if (!quote.freightType) missing.push("freight_type");
+  if (!quote.commodity) missing.push("commodity");
+  if (!quote.weightDimensions) missing.push("weight_dimensions");
+  if (!quote.pickupDetails) missing.push("pickup_details");
+  if (!quote.deliveryDetails) missing.push("delivery_details");
+  if (!quote.pickupDateStart) missing.push("pickup_date_start");
+  if (!quote.equipmentNeeds) missing.push("equipment_needs");
+  return missing;
 }
 
 async function getOrCreateConversation({ sessionId, customerIp, pageUrl }) {
@@ -368,7 +652,84 @@ app.post("/api/freight-assistant", async (request, response) => {
   }
 });
 
-app.get("/api/leads", async (request, response) => {
+app.post("/api/quote", async (request, response) => {
+  const quote = normalizeQuotePayload(request.body);
+  const missing = validateQuotePayload(quote);
+
+  if (missing.length) {
+    return response.status(400).json({ error: "Missing required quote fields.", missing });
+  }
+
+  if (!pool) {
+    return response.status(503).json({ error: "Quote intake is not configured yet. Please call 346-522-2772 or email quote@urfreight365llc.com." });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO quote_requests (
+        name, company, phone, email, freight_type, commodity, weight_dimensions,
+        pickup_details, delivery_details, pickup_date_start, pickup_date_end,
+        delivery_date_start, delivery_date_end, equipment_needs, temperature_details,
+        drop_and_hook, drop_and_trade, special_instructions, page_url, referrer,
+        utm_source, utm_medium, utm_campaign, ga_client_id, customer_ip
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7,
+        $8, $9, $10, $11,
+        $12, $13, $14, $15,
+        $16, $17, $18, $19, $20,
+        $21, $22, $23, $24, $25
+      ) RETURNING id, submitted_at`,
+      [
+        quote.name,
+        quote.company,
+        quote.phone,
+        quote.email,
+        quote.freightType,
+        quote.commodity,
+        quote.weightDimensions,
+        quote.pickupDetails,
+        quote.deliveryDetails,
+        quote.pickupDateStart,
+        quote.pickupDateEnd,
+        quote.deliveryDateStart,
+        quote.deliveryDateEnd,
+        quote.equipmentNeeds,
+        quote.temperatureDetails,
+        quote.dropAndHook,
+        quote.dropAndTrade,
+        quote.specialInstructions,
+        quote.pageUrl,
+        quote.referrer,
+        quote.utmSource,
+        quote.utmMedium,
+        quote.utmCampaign,
+        quote.gaClientId,
+        getCustomerIp(request),
+      ]
+    );
+
+    let hubspot = { skipped: true, reason: "HubSpot sync did not run." };
+    try {
+      hubspot = await syncQuoteToHubspot(quote);
+    } catch (error) {
+      console.error("HubSpot quote sync failed", { detail: error.message });
+      hubspot = { skipped: true, reason: "HubSpot sync failed; quote was saved locally." };
+    }
+
+    return response.status(201).json({
+      success: true,
+      quote_request_id: result.rows[0].id,
+      submitted_at: result.rows[0].submitted_at,
+      hubspot,
+      message: "Quote request received. UR Freight 365 will follow up using the contact details provided.",
+    });
+  } catch (error) {
+    console.error("Failed to save quote request", { detail: error.message });
+    return response.status(500).json({ error: "Failed to submit quote request." });
+  }
+});
+
+app.get("/api/leads", requireLeadsApiKey, async (request, response) => {
   if (!pool) return response.status(503).json({ error: "DATABASE_URL is not configured." });
 
   try {
@@ -386,7 +747,7 @@ app.get("/api/leads", async (request, response) => {
   }
 });
 
-app.get("/api/conversations", async (request, response) => {
+app.get("/api/conversations", requireLeadsApiKey, async (request, response) => {
   if (!pool) return response.status(503).json({ error: "DATABASE_URL is not configured." });
 
   try {
