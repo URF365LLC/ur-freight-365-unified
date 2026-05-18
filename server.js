@@ -4,6 +4,7 @@ const { randomUUID } = require("crypto");
 const { Pool } = require("pg");
 
 const app = express();
+app.disable("x-powered-by");
 const port = process.env.PORT || 3000;
 const ollamaEndpoint = process.env.OLLAMA_ENDPOINT || "https://ollama.com/v1/chat/completions";
 const ollamaModel = process.env.OLLAMA_MODEL || "llama3.2";
