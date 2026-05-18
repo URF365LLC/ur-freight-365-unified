@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 190" role="img" aria-labelledby="title desc">
+  <title id="title">Villitas Avocado</title>
+  <desc id="desc">Professional avocado produce logo fallback for Villitas Avocado</desc>
+  <defs>
+    <linearGradient id="leaf" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#7fbc42"/>
+      <stop offset="1" stop-color="#1d7f43"/>
+    </linearGradient>
+    <linearGradient id="seed" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#b57a3a"/>
+      <stop offset="1" stop-color="#70411f"/>
+    </linearGradient>
+  </defs>
+  <rect width="520" height="190" rx="36" fill="#fffef7"/>
+  <path d="M87 26c49 0 81 37 81 80 0 37-25 68-60 68-41 0-75-36-75-78 0-38 22-70 54-70z" fill="url(#leaf)"/>
+  <path d="M93 48c29 4 51 29 51 59 0 25-17 47-40 49-27 2-50-25-50-58 0-29 15-51 39-50z" fill="#d8ed8d" opacity=".95"/>
+  <ellipse cx="98" cy="112" rx="24" ry="29" fill="url(#seed)"/>
+  <path d="M82 27c12-9 28-12 44-11-8 12-21 21-38 25z" fill="#2f8f47"/>
+  <text x="192" y="84" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="900" fill="#183b25" letter-spacing="1">VILLITAS</text>
+  <text x="194" y="128" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" fill="#569833" letter-spacing="5">AVOCADO</text>
+  <path d="M196 146h250" stroke="#d1a14d" stroke-width="7" stroke-linecap="round"/>
+</svg>
