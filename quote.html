@@ -70,7 +70,7 @@ header{position:relative;z-index:2;padding:26px 0 14px;background:#181C28!import
       <p><a href="mailto:quote@urfreight365llc.com">quote@urfreight365llc.com</a></p>
     </div>
   </div>
-  <div class="site-footer__bottom"><div class="site-footer__bottom-inner"><span>© 2026 UR Freight 365 LLC. All rights reserved.</span><span>Licensed broker partner: Booking Logistics LLC | MC-1503468</span></div></div>
+  <div class="site-footer__bottom"><div class="site-footer__bottom-inner"><span>© 2026 UR Freight 365 LLC. All rights reserved.</span><span class="mc-badge"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Licensed Broker Â· Booking Logistics LLC Â· MC-1503468</span></div></div>
 </footer>
   <script src="./chat-widget.js" defer></script>
 
@@ -196,7 +196,12 @@ header{position:relative;z-index:2;padding:26px 0 14px;background:#181C28!import
         status.textContent = 'Submitting your quote request...';
         status.classList.remove('is-error', 'is-success');
       }
-      if (submitButton) submitButton.disabled = true;
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.setAttribute('aria-busy', 'true');
+        submitButton.dataset.label = submitButton.textContent;
+        submitButton.textContent = 'Submitting...';
+      }
 
       try {
         const response = await fetch(form.action, {
@@ -220,7 +225,11 @@ header{position:relative;z-index:2;padding:26px 0 14px;background:#181C28!import
           status.classList.add('is-error');
         }
       } finally {
-        if (submitButton) submitButton.disabled = false;
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.removeAttribute('aria-busy');
+          if (submitButton.dataset.label) submitButton.textContent = submitButton.dataset.label;
+        }
       }
     });
   });

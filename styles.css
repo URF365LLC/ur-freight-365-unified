@@ -44,3 +44,30 @@ header,.site-header{background:#181C28!important;border-bottom:1px solid rgba(25
 header .brand,.site-header .brand{background:#181C28!important}
 header .urf-logo,.site-header .urf-logo{display:block;width:178px;min-width:178px;height:auto;max-height:62px;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;object-fit:contain;overflow:visible}
 header .urf-logo::before,header .urf-logo::after,.site-header .urf-logo::before,.site-header .urf-logo::after{content:none!important}
+
+/* === Accessibility — cursor & focus === */
+a,button,[role="button"]{cursor:pointer}
+:focus-visible{outline:2px solid #CC2229;outline-offset:3px;border-radius:4px}
+:focus:not(:focus-visible){outline:none}
+
+/* === Consistent transitions for interactive elements === */
+.nav-link,.phone,.site-footer__links a,.site-footer__contact a{transition:border-color .15s ease,background .15s ease,color .15s ease}
+.button,.cta,.carrier-cta{transition:opacity .15s ease,box-shadow .2s ease,transform .2s ease}
+.button:hover,.cta:hover{opacity:.88}
+.assurance-card,.step-card,.lane-card,.teaser-card{transition:border-color .15s ease,background .15s ease}
+
+/* === Loading button state === */
+.button[aria-busy="true"]{position:relative;color:transparent!important;pointer-events:none;opacity:.8}
+.button[aria-busy="true"]::after{content:"";position:absolute;inset:0;margin:auto;width:18px;height:18px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:urf-spin .65s linear infinite}
+@keyframes urf-spin{to{transform:rotate(360deg)}}
+
+/* === Scroll-reveal animation === */
+.fade-in-wait{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease}
+.fade-in-wait.is-visible{opacity:1;transform:none}
+
+/* === MC / credentials badge === */
+.mc-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(204,34,41,.38);border-radius:999px;padding:6px 12px;background:rgba(204,34,41,.1);color:#f5d0d2;font-size:.78rem;font-weight:950;letter-spacing:.06em}
+.mc-badge svg{flex:0 0 auto;opacity:.9}
+
+/* === Reduced motion overrides (MUST be last) === */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.choice:hover,.page .card:hover,.page .source-card:hover{transform:none!important}.fade-in-wait,.fade-in-wait.is-visible{opacity:1;transform:none;transition:none}}
