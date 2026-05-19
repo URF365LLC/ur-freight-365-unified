@@ -14,8 +14,6 @@ const hubspotPipelineId = process.env.HUBSPOT_DEAL_PIPELINE_ID || process.env.HU
 const hubspotNewLeadStageId = process.env.HUBSPOT_NEW_LEAD_STAGE_ID || process.env.HUBSPOT_DEAL_STAGE_ID || "appointmentscheduled";
 const hubspotOwnerId = process.env.HUBSPOT_OWNER_ID || "90683018";
 
-app.disable("x-powered-by");
-
 const pool = databaseUrl
   ? new Pool({
       connectionString: databaseUrl,
