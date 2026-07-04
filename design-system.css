@@ -232,3 +232,16 @@ body.ds::before{content:"";position:fixed;inset:0;pointer-events:none;
 .ds-rail-mc{display:flex;align-items:center;gap:8px;margin:0 0 var(--s2);font-size:12px;font-weight:600;color:var(--text-3);line-height:1.4}
 .ds-rail-mc svg{width:14px;height:14px;flex:none;color:var(--red-hi)}
 .ds-rail .btn{width:100%}
+
+/* ---------- tags ---------- */
+.ds-tags{display:flex;flex-wrap:wrap;gap:10px}
+.ds-tag{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border:1px solid var(--line-2);border-radius:999px;
+  font-size:13px;font-weight:600;color:var(--text-2);background:rgba(255,255,255,.03)}
+.ds-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);flex:none}
+
+/* ---------- card as link (whole card clickable) ---------- */
+.ds-card-link{display:flex;flex-direction:column;text-decoration:none!important;color:inherit}
+.ds-card-link .ds-cta-link{margin-top:auto;padding-top:var(--s2);display:inline-flex;align-items:center;gap:8px;
+  color:var(--red-hi);font-size:14px;font-weight:700}
+.ds-card-link .ds-cta-link svg{width:15px;height:15px;transition:transform .18s}
+.ds-card-link:hover .ds-cta-link svg{transform:translateX(3px)}
