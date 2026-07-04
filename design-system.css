@@ -245,3 +245,17 @@ body.ds::before{content:"";position:fixed;inset:0;pointer-events:none;
   color:var(--red-hi);font-size:14px;font-weight:700}
 .ds-card-link .ds-cta-link svg{width:15px;height:15px;transition:transform .18s}
 .ds-card-link:hover .ds-cta-link svg{transform:translateX(3px)}
+
+/* ---------- numbered step badge (process cards) ---------- */
+.ds-card .ds-num{display:grid;place-items:center;width:44px;height:44px;margin-bottom:var(--s2);
+  border-radius:12px;background:var(--red);color:#fff;font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;
+  box-shadow:0 8px 20px rgba(204,34,41,.3)}
+
+/* ---------- broker/partner lockup ---------- */
+.ds-lockup{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;
+  padding:var(--s3);border:1px solid var(--line-1);border-radius:var(--radius);
+  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 34%),var(--ink-2)}
+.ds-lockup img{width:116px;height:auto;flex:none;border-radius:10px;background:#fff;padding:10px}
+.ds-lockup .ds-lockup-body{flex:1;min-width:240px}
+.ds-lockup h3{margin:0 0 8px}
+.ds-lockup p{margin:0;color:var(--text-2);font-size:15px;line-height:1.6}
