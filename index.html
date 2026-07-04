@@ -14,6 +14,7 @@
   <meta property="og:url" content="https://urfreight365llc.com/" />
   <meta property="og:image" content="./images/client-photos/editorial-crane-us-mx-hero.jpeg" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="./design-system.css" />
   <style>
     :root{--bg:#070b14;--panel:#101623;--card:#151b29;--red:#CC2229;--brand-red:#CC2229;/* TODO: replace with exact brand red from logo */--brand-silver:#C9D1D9;--brand-navy:#0D1117;--brand-blue:#1E90FF;--brand red:var(--brand-red);--green:#2E7D32;--green2:#43A047;--teal:#18d4c2;--text:#fff;--muted:#b8c2cf;--line:rgba(226,236,245,.16);--shadow:0 28px 90px rgba(0,0,0,.45)}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(circle at 70% 0,rgba(204,34,41,.18),transparent 28%),radial-gradient(circle at 18% 18%,rgba(24,212,194,.12),transparent 26%),linear-gradient(135deg,#070a12,#0a0e1a 48%,#14151a);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.6;overflow-x:hidden}a{color:inherit}.wrap{width:min(1180px,calc(100% - 32px));margin:auto}
@@ -40,27 +41,52 @@ header{background:#181C28!important;border-bottom:1px solid rgba(255,255,255,.12
 /* Sampled URF365 JPG background color: #181C28 */
 header,.site-header{background:#181C28!important;border-bottom:1px solid rgba(255,255,255,.12)!important;box-shadow:0 18px 60px rgba(0,0,0,.34)!important}
 header .brand,.site-header .brand{background:#181C28!important}
-</style>
+
+    /* ---- v2 overrides: photo hero, unified accent, type discipline ---- */
+    header.ds-header{position:sticky}
+    .hero{position:relative;isolation:isolate;min-height:min(72vh,640px);display:flex;align-items:flex-end;padding:110px 0 64px;
+      background:url('./images/real-loads/pipe-stepdeck-secured.jpg') center 38%/cover no-repeat}
+    .hero::after{content:"";position:absolute;inset:0;z-index:-1;
+      background:linear-gradient(180deg,rgba(5,7,12,.62) 0%,rgba(5,7,12,.38) 40%,rgba(5,7,12,.95) 90%,#070a12 100%),
+                 linear-gradient(90deg,rgba(5,7,12,.75) 0%,rgba(5,7,12,.28) 62%,transparent 100%)}
+    .hero .eyebrow{display:inline-flex;align-items:center;gap:10px;color:#e8353d;font-weight:800;letter-spacing:.22em;font-size:12px;text-transform:uppercase}
+    .hero .eyebrow::before{content:"";width:26px;height:2px;background:#CC2229;border-radius:2px}
+    .hero h1{font-size:clamp(38px,4.8vw,60px);letter-spacing:-.025em;line-height:1.06;max-width:20ch;text-align:left;margin-inline:0}
+    .hero p{max-width:58ch;font-size:19px;color:#c3cddb;text-align:left;margin-inline:0;text-shadow:0 2px 16px rgba(0,0,0,.55)}
+    .hero .wrap{text-align:left}
+    .hero-actions-v2{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}
+    .choice .cta{background:linear-gradient(135deg,#CC2229,#e8353d)!important;box-shadow:0 14px 34px rgba(204,34,41,.35)!important}
+    .choice h2{font-size:clamp(24px,2vw,30px)}
+
+  </style>
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"UR Freight 365 LLC","address":{"@type":"PostalAddress","addressLocality":"Houston","addressRegion":"TX","addressCountry":"US"},"telephone":"+1-346-522-2772","email":"quote@urfreight365llc.com","url":"https://urfreight365llc.com/","areaServed":["Houston TX","Texas","United States"],"description":"Houston freight broker for steel, pipe, produce reefer, cross-border, port, warehouse, and last-mile freight support."}</script>
   <link rel="stylesheet" href="./chat-widget.css" />
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <a class="brand" href="./index.html" aria-label="UR Freight 365 LLC homepage">
-        <img class="urf-logo" src="./assets/images/urf365-logo.jpg" alt="URF365 logo" loading="eager">
-        <div class="brand-copy"><small>UR Freight 365 LLC</small><strong>Houston Freight Command</strong></div>
-      </a>
-      <div class="nav-actions"><a class="nav-link" href="#carrier-onboarding">Carriers</a><a class="nav-link" href="#shipper-setup">Shipper Setup</a><a class="nav-link" href="#compliance">Compliance</a><a class="phone" href="tel:+13465222772">Call 346-522-2772</a></div>
-    </div>
-  </header>
+  <header class="ds-header">
+  <a class="ds-brand" href="./index.html"><img src="./assets/images/urf365-logo.jpg" alt="URF365 logo"><span><strong>UR Freight 365 LLC</strong><small>Houston Freight Command</small></span></a>
+  <input type="checkbox" id="ds-nav-t" class="ds-nav-toggle-box" aria-hidden="true">
+  <label for="ds-nav-t" class="ds-nav-toggle" aria-label="Toggle navigation"><span></span></label>
+  <nav class="ds-nav" aria-label="Primary navigation">
+    <a href="./services.html">Services</a>
+    <a href="./case-study-steel.html">Case Study</a>
+    <a href="./us-canada-freight.html">Canada</a>
+    <a href="./solar-project-freight.html">Solar</a>
+    <a href="./carriers.html">Carriers</a>
+    <a class="ds-nav-cta" href="./quote.html">Request a Quote</a>
+  </nav>
+</header>
   <main>
     <section class="hero">
       <div class="wrap">
         <div class="eyebrow">Choose Your Freight Division</div>
         <h1>Real freight command for Houston industrial, produce, and border lanes.</h1>
         <p>UR Freight 365 LLC helps shippers move steel pipe, fresh produce, refrigerated freight, port freight, warehouse transfers, and cross-border loads with operator-driven intake, lane awareness, and direct communication from quote to delivery.</p>
+        <div class="ds hero-actions-v2">
+          <a class="btn btn-primary" href="./quote.html">Request a Freight Quote</a>
+          <a class="btn btn-secondary" href="./case-study-steel.html">See the 245-Load Case Study</a>
+        </div>
       </div>
     </section>
     <section class="wrap gateway" aria-label="UR Freight 365 service gateways">
@@ -126,19 +152,31 @@ header .brand,.site-header .brand{background:#181C28!important}
         <div class="operator-note">Built for shipper-side clarity: send the commodity, origin, destination, weight, timing, equipment, and handling notes once, and URF365 routes the load to the right freight desk.</div>
       </div>
     </section>
-    <section class="wrap" aria-label="Proven freight history" style="margin:34px auto">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">
-    <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 14px;text-align:center"><strong style="display:block;font-size:1.8rem">1,200+</strong><span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Loads in 3 years</span></div>
-    <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 14px;text-align:center"><strong style="display:block;font-size:1.8rem">358</strong><span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Carriers sourced</span></div>
-    <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 14px;text-align:center"><strong style="display:block;font-size:1.8rem">116</strong><span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Lanes &middot; US, Canada &amp; Mexico</span></div>
-    <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 14px;text-align:center"><strong style="display:block;font-size:1.8rem">99.6%</strong><span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Loss-free on our flagship program</span></div>
+    <section class="ds" aria-label="Proven freight history" style="margin:56px auto"><div class="ds-wrap">
+  <div class="ds-stats">
+    <div class="ds-stat"><strong><span data-count="1200">0</span>+</strong><span>Loads in 3 years</span></div>
+    <div class="ds-stat"><strong data-count="358">0</strong><span>Carriers sourced</span></div>
+    <div class="ds-stat"><strong data-count="116">0</strong><span>Lanes &middot; US, Canada &amp; Mexico</span></div>
+    <div class="ds-stat"><strong><span class="hot" data-count="99.6">0</span>%</strong><span>Loss-free on our flagship program</span></div>
   </div>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px">
-    <a href="./case-study-steel.html" style="text-decoration:none;background:var(--brand-red);color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:.9rem">Read the 245-Load Steel Case Study &rarr;</a>
-    <a href="./us-canada-freight.html" style="text-decoration:none;border:1px solid var(--line);color:#fff;padding:10px 18px;border-radius:10px;font-size:.9rem">U.S. &#8596; Canada Freight</a>
-    <a href="./solar-project-freight.html" style="text-decoration:none;border:1px solid var(--line);color:#fff;padding:10px 18px;border-radius:10px;font-size:.9rem">Solar Project Freight</a>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:22px">
+    <a class="btn btn-primary" href="./case-study-steel.html">Read the 245-Load Steel Case Study</a>
+    <a class="btn btn-secondary" href="./us-canada-freight.html">U.S. &#8596; Canada Freight</a>
+    <a class="btn btn-secondary" href="./solar-project-freight.html">Solar Project Freight</a>
   </div>
-</section>
+</div></section>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;io.unobserve(e.target);
+    var el=e.target,target=parseFloat(el.dataset.count),dec=target%1?1:0,t0=null;
+    function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1100,1);p=1-Math.pow(1-p,3);
+      el.textContent=(target*p).toFixed(dec);if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  })},{threshold:.4});
+  document.querySelectorAll("[data-count]").forEach(function(el){io.observe(el)});
+})();
+</script>
 <section class="wrap teaser-row" aria-label="Setup and compliance shortcuts">
       <article class="teaser-card" id="compliance">
         <div class="eyebrow">Compliance</div>
