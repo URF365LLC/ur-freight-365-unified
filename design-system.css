@@ -171,3 +171,64 @@ body.ds::before{content:"";position:fixed;inset:0;pointer-events:none;
 .ds-reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
 .ds-reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.ds-reveal{opacity:1;transform:none;transition:none}.ds *{transition-duration:.01ms!important}}
+
+/* ---------- compact hero (form / utility pages) ---------- */
+.ds-hero.ds-hero-sm{min-height:auto;padding:116px 0 var(--s5)}
+
+/* ---------- forms ---------- */
+.ds-form-layout{display:grid;gap:var(--s3);grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);align-items:start}
+@media (max-width:900px){.ds-form-layout{grid-template-columns:1fr}}
+.ds-form{display:grid;gap:var(--s2)}
+.ds-fieldset{margin:0;padding:var(--s3);border:1px solid var(--line-1);border-radius:var(--radius);
+  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 30%),var(--ink-2)}
+.ds-fieldset legend{display:flex;align-items:center;gap:12px;padding:0;margin:0 0 var(--s2)}
+.ds-fieldset legend b{font-size:var(--fs-lg);font-weight:700;color:var(--text-1);letter-spacing:-.01em}
+.ds-fieldset legend i{display:grid;place-items:center;width:26px;height:26px;flex:none;border-radius:8px;
+  background:var(--red);color:#fff;font-style:normal;font-size:13px;font-weight:800}
+.ds-fields{display:grid;gap:var(--s2);grid-template-columns:repeat(2,minmax(0,1fr))}
+.ds-fields .ds-field.full{grid-column:1/-1}
+@media (max-width:560px){.ds-fields{grid-template-columns:1fr}}
+.ds-field{display:grid;gap:7px;min-width:0}
+.ds-field > span{font-size:13px;font-weight:600;color:var(--text-2)}
+.ds-field > span .req{color:var(--red-hi);font-style:normal}
+.ds-field input,.ds-field select,.ds-field textarea{width:100%;font:inherit;font-size:15px;color:var(--text-1);
+  background:rgba(255,255,255,.04);border:1px solid var(--line-2);border-radius:12px;padding:13px 14px;
+  transition:border-color .16s,box-shadow .16s,background .16s}
+.ds-field input[type=date]{color-scheme:dark}
+.ds-field textarea{min-height:92px;resize:vertical;line-height:1.55}
+.ds-field input::placeholder,.ds-field textarea::placeholder{color:var(--text-3)}
+.ds-field input:focus,.ds-field select:focus,.ds-field textarea:focus{outline:none;border-color:var(--red);
+  background:rgba(255,255,255,.06);box-shadow:0 0 0 3px rgba(204,34,41,.2)}
+.ds-field select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:40px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aab6c6' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center}
+.ds-field select option{background:var(--ink-2);color:var(--text-1)}
+.ds-form-actions{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s1)}
+.ds-form-status{min-height:20px;margin:2px 0 0;font-size:14px;font-weight:600;color:var(--text-2)}
+.ds-form-status.is-success{color:var(--ok)}
+.ds-form-status.is-error{color:var(--red-hi)}
+.ds-form .fine{margin-top:0}
+
+/* ---------- trust rail ---------- */
+.ds-rail{display:grid;gap:var(--s2);position:sticky;top:90px}
+@media (max-width:900px){.ds-rail{position:static}}
+.ds-rail-card{padding:var(--s3);border:1px solid var(--line-1);border-radius:var(--radius);
+  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 34%),var(--ink-2)}
+.ds-rail-card h3{margin:0 0 12px}
+.ds-rail-hot{border-color:rgba(204,34,41,.35);background:linear-gradient(120deg,rgba(204,34,41,.14),transparent 60%),var(--ink-2)}
+.ds-rail-num{margin:0;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--text-1);font-variant-numeric:tabular-nums}
+.ds-rail-lbl{margin:10px 0 0;font-size:13px;color:var(--text-2);line-height:1.5}
+.ds-rail-list{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+.ds-rail-list li{position:relative;padding-left:26px;font-size:14px;color:var(--text-2);line-height:1.5}
+.ds-rail-list li::before{content:"";position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:5px;
+  background:rgba(204,34,41,.14);border:1px solid rgba(204,34,41,.4)}
+.ds-rail-list li::after{content:"";position:absolute;left:5px;top:4px;width:5px;height:8px;
+  border-right:2px solid var(--red-hi);border-bottom:2px solid var(--red-hi);transform:rotate(45deg)}
+.ds-rail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);
+  padding-bottom:var(--s2);margin-bottom:var(--s2);border-bottom:1px solid var(--line-1)}
+.ds-rail-stats strong{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--text-1);font-variant-numeric:tabular-nums}
+.ds-rail-stats .hot{color:var(--red-hi)}
+.ds-rail-stats span{display:block;margin-top:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+.ds-rail-mc{display:flex;align-items:center;gap:8px;margin:0 0 var(--s2);font-size:12px;font-weight:600;color:var(--text-3);line-height:1.4}
+.ds-rail-mc svg{width:14px;height:14px;flex:none;color:var(--red-hi)}
+.ds-rail .btn{width:100%}
