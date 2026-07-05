@@ -86,6 +86,18 @@ and `z-crossborder-*` (cab or plate may be visible), `frontera-watermelons`/`vil
 | produce/ | `frontera-jalapenos-reefer-interior.jpeg` | **Frontera reefer** ✓ |
 | logistics/ | `z-warehouse-pallet-load.jpeg` | warehouse / last-mile |
 
+## 4b. Galleries now live (real loads in rotation)
+- **services** "Real loads": tube-supply-octg-pipe-topdown, warrior-fontaine-galvanized-steel-load, z-griffin-material-flatbed
+- **steel/** "Real steel loads": z-steel-tubing-loader-1, tube-supply-octg-pipe-endcaps, griffin-industrial-load
+- **produce/** "Real cold chain loads": frontera-produce-pallets-2, z-reefer-cold-chain-racks, frontera-watermelons
+- **solar-project-freight** "Galvanized steel": warrior-flatbed-yard, warrior-flatbed-load-3, warrior-peterbilt-rain-redacted
+- **us-canada-freight** (existing): triple-s-edmonton-pipe-night, triple-s-night-flatbed-1, steel-bars-pipe-yard-canada
+- **case-study-steel** (existing): tube-supply-octg-pipe-topdown, tube-supply-open-deck
+
+## 4c. Redacted images (carrier markings blurred via Pillow; originals kept)
+- `z-freightliner-dock-redacted.jpeg` (from z-warehouse-trucks-dock; PROLOGISTICS + MC/USDOT blurred) — compliance hero
+- `warrior-peterbilt-rain-redacted.jpeg` (from warrior-peterbilt-rain-steel-load; door decal blurred) — solar gallery
+
 ## 5. Recommended next placements (galleries / cards — not yet applied)
 - **case-study-steel gallery:** already uses `tube-supply-octg-pipe-topdown`, `tube-supply-open-deck` — good.
 - **steel/**: add a small gallery (`tube-supply-pipe-flatbed`, `griffin-steel-plates-flatbed`, `special-metals-steel-flatbed`) to visually cover all three named clients.
