@@ -263,3 +263,36 @@ body.ds::before{content:"";position:fixed;inset:0;pointer-events:none;
 /* ---------- checklist (2-col variant of the rail list) ---------- */
 .ds-checklist-2{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px}
 @media (max-width:640px){.ds-checklist-2{grid-template-columns:1fr}}
+
+/* ============================================================
+   FOOTER — single source of truth. Scoped under .ds so these
+   win over styles.css (equal-specificity, load-order) and any
+   legacy inline footer CSS. Handles both bottom-bar variants
+   (.site-footer__legal and .site-footer__bottom + .mc-badge).
+   ============================================================ */
+.ds .site-footer{position:relative;z-index:1;margin-top:var(--s4);border-top:1px solid var(--line-1);
+  background:linear-gradient(180deg,var(--ink-1),var(--ink-0));color:var(--text-2);padding:0;text-align:left}
+.ds .site-footer__inner{width:min(var(--wrap),calc(100% - 40px));margin:0 auto;display:grid;
+  grid-template-columns:minmax(240px,1.25fr) minmax(240px,1fr) minmax(220px,.85fr);gap:var(--s4);align-items:start;padding:var(--s5) 0 var(--s4)}
+.ds .site-footer__brand{display:grid;gap:var(--s2)}
+.ds .site-footer__broker{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--line-1);border-radius:14px;background:rgba(255,255,255,.04)}
+.ds .site-footer__broker img{width:54px;height:54px;object-fit:contain;border-radius:12px;background:#fff;padding:7px;flex:0 0 auto}
+.ds .site-footer__eyebrow{display:block;color:var(--red-hi);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.ds .site-footer__title{display:block;color:var(--text-1);font-weight:700;line-height:1.25;font-size:15px}
+.ds .site-footer__text{margin:8px 0 0;color:var(--text-3);font-size:14px;line-height:1.55}
+.ds .site-footer__heading{margin:0 0 14px;color:var(--text-1);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.ds .site-footer__links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px 20px}
+.ds .site-footer__nav{min-width:0}
+.ds .site-footer__links a,.ds .site-footer__contact a{color:var(--text-2);text-decoration:none;font-weight:500;font-size:14px;transition:color .15s}
+.ds .site-footer__links a:hover,.ds .site-footer__contact a:hover{color:var(--red-hi)}
+.ds .site-footer__contact{display:grid;gap:8px}
+.ds .site-footer__contact p,.ds .site-footer__contact .site-footer__text{margin:0;color:var(--text-3);font-size:14px;line-height:1.6}
+.ds .site-footer__contact a{color:var(--text-2)}
+/* bottom bar — supports both markup variants */
+.ds .site-footer__legal{width:min(var(--wrap),calc(100% - 40px));margin:0 auto;border-top:1px solid var(--line-1);padding:16px 0;color:var(--text-3);font-size:13px}
+.ds .site-footer__bottom{border-top:1px solid var(--line-1)}
+.ds .site-footer__bottom-inner{width:min(var(--wrap),calc(100% - 40px));margin:0 auto;padding:16px 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--text-3);font-size:13px}
+.ds .mc-badge{display:inline-flex;gap:7px;align-items:center;color:var(--text-3)}
+.ds .mc-badge svg{color:var(--red-hi);flex:none}
+@media (max-width:860px){.ds .site-footer__inner{grid-template-columns:1fr 1fr}.ds .site-footer__contact{grid-column:1/-1}}
+@media (max-width:560px){.ds .site-footer__inner{grid-template-columns:1fr;padding:var(--s4) 0}.ds .site-footer__links{grid-template-columns:1fr 1fr}.ds .site-footer__broker{align-items:flex-start}.ds .site-footer__bottom-inner{flex-direction:column;gap:8px}}
