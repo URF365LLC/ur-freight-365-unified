@@ -13,6 +13,9 @@ const hubspotAccessToken = process.env.HUBSPOT_ACCESS_TOKEN || process.env.HUBSP
 const hubspotPipelineId = process.env.HUBSPOT_DEAL_PIPELINE_ID || process.env.HUBSPOT_PIPELINE_ID || "default";
 const hubspotNewLeadStageId = process.env.HUBSPOT_NEW_LEAD_STAGE_ID || process.env.HUBSPOT_DEAL_STAGE_ID || "appointmentscheduled";
 const hubspotOwnerId = process.env.HUBSPOT_OWNER_ID || "90683018";
+// Command-center CRM inbound endpoint (server-to-server; secret never reaches the browser).
+const crmInboundUrl = process.env.CRM_INBOUND_URL;
+const crmInboundSecret = process.env.INBOUND_RFQ_SECRET;
 
 const pool = databaseUrl
   ? new Pool({
@@ -321,6 +324,31 @@ async function syncQuoteToHubspot(quote) {
   const deal = await createHubspotDealAndTask(quote, contact, company);
 
   return { skipped: false, contactId: contact?.id || null, companyId: company?.id || null, dealId: deal?.id || null };
+}
+
+// Forward the inbound RFQ to the command-center CRM (creates org/contact/opportunity/task/alert).
+// Non-blocking and fail-soft: the shipper's confirmation never depends on this call.
+async function syncQuoteToCrm(quote, customerIp) {
+  if (!crmInboundUrl || !crmInboundSecret) {
+    return { skipped: true, reason: "CRM_INBOUND_URL / INBOUND_RFQ_SECRET are not configured." };
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(crmInboundUrl, {
+      method: "POST",
+      signal: controller.signal,
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${crmInboundSecret}` },
+      body: JSON.stringify({ ...quote, ip: customerIp, source: "website_rfq" }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { skipped: true, reason: data.error || `CRM returned ${res.status}` };
+    return { ok: true, opportunityId: data.opportunityId ?? null, tier: data.tier ?? null, duplicate: Boolean(data.duplicate) };
+  } catch (error) {
+    return { skipped: true, reason: error.name === "AbortError" ? "CRM sync timeout" : error.message };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function normalizeQuotePayload(body = {}) {
@@ -714,11 +742,20 @@ app.post("/api/quote", async (request, response) => {
       hubspot = { skipped: true, reason: "HubSpot sync failed; quote was saved locally." };
     }
 
+    let crm = { skipped: true, reason: "CRM sync did not run." };
+    try {
+      crm = await syncQuoteToCrm(quote, getCustomerIp(request));
+    } catch (error) {
+      console.error("CRM quote sync failed", { detail: error.message });
+      crm = { skipped: true, reason: "CRM sync failed; quote was saved locally." };
+    }
+
     return response.status(201).json({
       success: true,
       quote_request_id: result.rows[0].id,
       submitted_at: result.rows[0].submitted_at,
       hubspot,
+      crm,
       message: "Quote request received. UR Freight 365 will follow up using the contact details provided.",
     });
   } catch (error) {
